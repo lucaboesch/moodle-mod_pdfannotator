@@ -42,12 +42,14 @@ require_once("$CFG->dirroot/mod/pdfannotator/lib.php");
 function pdfannotator_display_embed($pdfannotator, $cm, $course, $file, $page = 1, $annoid = null, $commid = null) {
     global $CFG, $PAGE, $OUTPUT, $USER;
 
-    // The revision attribute's existance is demanded by moodle for versioning and could be saved in the pdfannotator table in the future.
+    // The revision attribute's existance is demanded by moodle for versioning and could be saved in the pdfannotator table in the
+    // future.
     // Note, however, that we forbid file replacement in order to prevent a change of meaning in other people's comments.
     $pdfannotator->revision = 1;
 
     $context = context_module::instance($cm->id);
-    $path = '/' . $context->id . '/mod_pdfannotator/content/' . $pdfannotator->revision . $file->get_filepath() . $file->get_filename();
+    $path = '/' . $context->id . '/mod_pdfannotator/content/' . $pdfannotator->revision . $file->get_filepath() .
+        $file->get_filename();
     $fullurl = file_encode_url($CFG->wwwroot . '/pluginfile.php', $path, false);
 
     $documentobject = new stdClass();
@@ -188,7 +190,7 @@ SIGN;
         $string = str_replace('\begin{align*}', '', $string);
         $string = str_replace('\end{align*}', '', $string);
 
-        // Find any backslash preceding a ( or [ and replace it with \backslash
+        // Find any backslash preceding a ( or [ and replace it with \backslash.
         $pattern = '~\\\\(?=[\\\(\\\[])~';
         $string = preg_replace($pattern, '\\backslash', $string);
         $match[0] = $string;
@@ -241,13 +243,15 @@ function pdfannotator_process_latex_google(string $string) {
     if ($length <= 200) { // Google API constraint XXX find better alternative if possible.
         $latexdata = urlencode($string);
         $requesturl = LATEX_TO_PNG_REQUEST . $latexdata;
-        $im = @file_get_contents($requesturl); // '@' suppresses warnings so that one failed google request doesn't prevent the pdf from being printed,
+        $im = @file_get_contents($requesturl);
+        // '@' suppresses warnings so that one failed google request doesn't prevent the pdf from being printed,
         // but just the one formula from being presented as a picture.
     }
     if ($im != null) {
         $array = [];
         try {
-            list($width, $height) = getimagesize($requesturl); // XXX alternative: acess height by decoding the string (saving the extra server request)?
+            list($width, $height) = getimagesize($requesturl);
+            // XXX alternative: acess height by decoding the string (saving the extra server request)?
             if ($height != null) {
                 $imagedata = IMAGE_PREFIX . base64_encode($im); // Image.
                 $array['image'] = $imagedata;
@@ -267,11 +271,13 @@ function pdfannotator_send_forward_message($recipients, $messageparams, $course,
     $text = new stdClass();
     $module = get_string('modulename', 'pdfannotator');
     $modulename = format_string($cm->name, true);
-    $text->text = pdfannotator_format_notification_message_text($course, $cm, $context, $module, $modulename, $messageparams, $name);
+    $text->text = pdfannotator_format_notification_message_text($course, $cm, $context, $module, $modulename, $messageparams,
+        $name);
     $text->url = $messageparams->urltoquestion;
 
     foreach ($recipients as $recipient) {
-        $text->html = pdfannotator_format_notification_message_html($course, $cm, $context, $module, $modulename, $messageparams, $name, $recipient);
+        $text->html = pdfannotator_format_notification_message_html($course, $cm, $context, $module, $modulename, $messageparams,
+            $name, $recipient);
         pdfannotator_notify_manager($recipient, $course, $cm, $name, $text);
     }
 }
@@ -307,7 +313,8 @@ function pdfannotator_notify_manager($recipient, $course, $cm, $name, $messagete
     return $messageid;
 }
 
-function pdfannotator_format_notification_message_text($course, $cm, $context, $modulename, $pdfannotatorname, $paramsforlanguagestring, $messagetype) {
+function pdfannotator_format_notification_message_text($course, $cm, $context, $modulename, $pdfannotatorname,
+    $paramsforlanguagestring, $messagetype) {
     global $CFG;
     $formatparams = array('context' => $context->get_course_context());
     $posttext = format_string($course->shortname, true, $formatparams) .
@@ -317,7 +324,8 @@ function pdfannotator_format_notification_message_text($course, $cm, $context, $
         format_string($pdfannotatorname, true, $formatparams) . "\n";
     $posttext .= '---------------------------------------------------------------------' . "\n";
     $posttext .= "\n";
-    $posttext .= get_string($messagetype . 'text', 'pdfannotator', $paramsforlanguagestring) . "\n---------------------------------------------------------------------\n";
+    $posttext .= get_string($messagetype . 'text', 'pdfannotator', $paramsforlanguagestring) .
+        "\n---------------------------------------------------------------------\n";
     return $posttext;
 }
 
@@ -332,7 +340,8 @@ function pdfannotator_format_notification_message_text($course, $cm, $context, $
  * @param stdClass $coursemodule
  * @param string $assignmentname
  */
-function pdfannotator_format_notification_message_html($course, $cm, $context, $modulename, $pdfannotatorname, $report, $messagetype, $recipientid) {
+function pdfannotator_format_notification_message_html($course, $cm, $context, $modulename, $pdfannotatorname, $report,
+    $messagetype, $recipientid) {
     global $CFG, $USER;
     $formatparams = array('context' => $context->get_course_context());
     $posthtml = '<p><font face="sans-serif">' .
@@ -351,7 +360,8 @@ function pdfannotator_format_notification_message_html($course, $cm, $context, $
     $linktonotificationsettingspage = new moodle_url('/message/notificationpreferences.php', array('userid' => $recipientid));
     $linktonotificationsettingspage = $linktonotificationsettingspage->__toString();
     $posthtml .= '</font><hr />';
-    $posthtml .= '<font face="sans-serif"><p>' . get_string('unsubscribe_notification', 'pdfannotator', $linktonotificationsettingspage) . '</p></font>';
+    $posthtml .= '<font face="sans-serif"><p>' . get_string('unsubscribe_notification', 'pdfannotator',
+        $linktonotificationsettingspage) . '</p></font>';
     return $posthtml;
 }
 
@@ -464,7 +474,8 @@ function pdfannotator_print_filenotfound($pdfannotator, $cm, $course) {
     global $DB, $OUTPUT;
 
     pdfannotator_print_header($pdfannotator, $cm, $course);
-    // pdfannotator_print_heading($pdfannotator, $cm, $course);//TODO Method is not defined.
+    // pdfannotator_print_heading($pdfannotator, $cm, $course);
+    // TODO Method is not defined.
     pdfannotator_print_intro($pdfannotator, $cm, $course);
     echo $OUTPUT->notification(get_string('filenotfound', 'pdfannotator'));
 
@@ -524,11 +535,13 @@ function pdfannotator_get_datetime_of_last_modification($annotatorid) {
 
         foreach ($newposts as $entry) {
 
-            // 2.a) If there is an annotation younger than the creation/modification of the annotator, set timemodified to the annotation time.
+            // 2.a) If there is an annotation younger than the creation/modification of the annotator, set timemodified to the
+            // annotation time.
             if (!empty($entry->last_annotation) && ($entry->last_annotation > $timemodified)) {
                 $timemodified = $entry->last_annotation;
             }
-            // 2.b) If there is a comment younger than the creation/modification of the annotator or its newest annotation, set timemodified to the comment time.
+            // 2.b) If there is a comment younger than the creation/modification of the annotator or its newest annotation,
+            // set timemodified to the comment time.
             if (!empty($entry->last_comment) && ($entry->last_comment > $timemodified)) {
                 $timemodified = $entry->last_comment;
             }
@@ -583,7 +596,8 @@ function pdfannotator_render_listitem_actions(array $actions = null) {
     foreach ($actions as $key => $action) {
         $hasitems = true;
         $menu->add(new action_menu_link(
-            $action['url'], $action['icon'], $action['string'], in_array($key, []), ['data-action' => $key, 'class' => 'action-' . $key]
+            $action['url'], $action['icon'], $action['string'], in_array($key, []), ['data-action' => $key,
+            'class' => 'action-' . $key]
         ));
     }
     if (!$hasitems) {
@@ -621,7 +635,8 @@ function pdfannotator_unsubscribe_all($annotatorid) {
 
 /**
  * Checks wether a user has subscribed to all questions in an annotator.
- * Returns 1 if all questions are subscribed, 0 if no questions are subscribed and -1 if at least one but not all questions are subscribed.
+ * Returns 1 if all questions are subscribed, 0 if no questions are subscribed and -1 if at least one but not all questions are
+ * subscribed.
  * @param type $annotatorid
  */
 function pdfannotator_subscribed($annotatorid) {
@@ -650,7 +665,8 @@ function pdfannotator_subscribed($annotatorid) {
  * @return string Day, D Month Y, Time
  */
 function pdfannotator_get_user_datetime($timestamp) {
-    $userdatetime = userdate($timestamp, $format = '', $timezone = 99, $fixday = true, $fixhour = true); // Method in lib/moodlelib.php
+    $userdatetime = userdate($timestamp, $format = '', $timezone = 99, $fixday = true, $fixhour = true);
+    // Method in lib/moodlelib.php.
     return $userdatetime;
 }
 
@@ -661,7 +677,8 @@ function pdfannotator_get_user_datetime($timestamp) {
  */
 function pdfannotator_get_user_datetime_shortformat($timestamp) {
     $shortformat = get_string('strftimedatetime', 'pdfannotator'); // Format strings in moodle\lang\en\langconfig.php.
-    $userdatetime = userdate($timestamp, $shortformat, $timezone = 99, $fixday = true, $fixhour = true); // Method in lib/moodlelib.php
+    $userdatetime = userdate($timestamp, $shortformat, $timezone = 99, $fixday = true, $fixhour = true);
+    // Method in lib/moodlelib.php.
     return $userdatetime;
 }
 
@@ -688,8 +705,10 @@ function pdfannotator_prepare_overviewpage($cmid, $myrenderer, $taburl, $action,
 
     // 1.2 Give javascript (see below) access to the language string repository.
     $stringman = get_string_manager();
-    $strings = $stringman->load_component_strings('pdfannotator', 'en'); // Method gets the strings of the language files.
-    $PAGE->requires->strings_for_js(array_keys($strings), 'pdfannotator'); // Method to use the language-strings in javascript.
+    $strings = $stringman->load_component_strings('pdfannotator', 'en');
+    // Method gets the strings of the language files.
+    $PAGE->requires->strings_for_js(array_keys($strings), 'pdfannotator');
+    // Method to use the language-strings in javascript.
     // 1.3 Add the javascript file that determines the dynamic behaviour of the page.
     $PAGE->requires->js(new moodle_url("/mod/pdfannotator/shared/locallib.js?ver=00002"));
     $PAGE->requires->js(new moodle_url("/mod/pdfannotator/shared/overview.js?ver=00002"));
@@ -744,7 +763,8 @@ function pdfannotator_get_questions($courseid, $context, $questionfilter) {
     $questions = $DB->get_records_sql($sql, $params);
 
     $seehidden = has_capability('mod/pdfannotator:seehiddencomments', $context);
-    $labelhidden = "<br><span class='tag tag-info'>" . get_string('hiddenfromstudents') . "</span>"; // XXX use moodle method if exists.
+    $labelhidden = "<br><span class='tag tag-info'>" . get_string('hiddenfromstudents') . "</span>";
+    // XXX use moodle method if exists.
     $labelunavailable = "<br><span class='tag tag-info'>" . get_string('restricted') . "</span>";
 
     $res = [];
@@ -832,7 +852,8 @@ function pdfannotator_get_posts_by_this_user($courseid, $context) {
         . "JOIN {course_modules} cm ON p.id = cm.instance "
         . "LEFT JOIN {pdfannotator_votes} v ON c.id = v.commentid "
         . "WHERE c.userid = ? AND p.course = ? AND cm.id $insql "
-        . "GROUP BY a.id, p.name, p.usevotes, cm.id, c.id, c.annotationid, c.content, c.timemodified, c.ishidden, a.page, a.pdfannotatorid";
+        . "GROUP BY a.id, p.name, p.usevotes, cm.id, c.id, c.annotationid, c.content, c.timemodified, c.ishidden, a.page, "
+        . "a.pdfannotatorid";
 
     $params = array_merge([$USER->id, $courseid], $inparams);
 
@@ -925,7 +946,8 @@ function pdfannotator_get_answers_for_this_user($courseid, $context, $answerfilt
             . "JOIN {pdfannotator_comments} c ON c.annotationid = a.id " // Answer comment.
             . "JOIN {pdfannotator} p ON a.pdfannotatorid = p.id "
             . "JOIN {course_modules} cm ON p.id = cm.instance "
-            . "WHERE s.userid = ? AND p.course = ? AND q.isquestion = 1 AND NOT c.isquestion = 1 AND NOT c.isdeleted = 1 AND cm.id $insql "
+            . "WHERE s.userid = ? AND p.course = ? AND q.isquestion = 1 AND NOT c.isquestion = 1 AND NOT c.isdeleted = 1 "
+            . "AND cm.id $insql "
             . "ORDER BY annoid ASC";
     }
 
@@ -941,7 +963,8 @@ function pdfannotator_get_answers_for_this_user($courseid, $context, $answerfilt
         $entry->link = (new moodle_url('/mod/pdfannotator/view.php',
             array('id' => $entry->cmid, 'page' => $entry->page, 'annoid' => $entry->annoid, 'commid' => $entry->answerid)))->out();
         $entry->questionlink = (new moodle_url('/mod/pdfannotator/view.php',
-            array('id' => $entry->cmid, 'page' => $entry->page, 'annoid' => $entry->annoid, 'commid' => $entry->questionid)))->out();
+            array('id' => $entry->cmid, 'page' => $entry->page, 'annoid' => $entry->annoid,
+            'commid' => $entry->questionid)))->out();
 
         if ($entry->questiondeleted == 1) {
             $entry->answeredquestion = get_string('deletedComment', 'pdfannotator');
@@ -1010,7 +1033,8 @@ function pdfannotator_get_reports($courseid, $reportfilter = 0) {
 
     // Retrieve reports from db as an array of stdClass objects, representing a report record each.
     $sql = "SELECT r.id as reportid, r.commentid, r.message as report, r.userid AS reportinguser, r.timecreated, r.seen, "
-        . "a.page, c.id AS commentid, c.annotationid, c.userid AS commentauthor, c.content AS reportedcomment, c.timecreated AS commenttime, c.visibility, "
+        . "a.page, c.id AS commentid, c.annotationid, c.userid AS commentauthor, c.content AS reportedcomment, "
+        . "c.timecreated AS commenttime, c.visibility, "
         . "p.id AS annotatorid, p.name AS pdfannotatorname, cm.id AS cmid, cm.visible AS cmvisible "
         . "FROM {pdfannotator_reports} r "
         . "JOIN {pdfannotator_comments} c ON r.commentid = c.id "
@@ -1030,7 +1054,8 @@ function pdfannotator_get_reports($courseid, $reportfilter = 0) {
 
     foreach ($reports as $report) {
         $report->link = (new moodle_url('/mod/pdfannotator/view.php',
-            array('id' => $report->cmid, 'page' => $report->page, 'annoid' => $report->annotationid, 'commid' => $report->commentid)))->out();
+            array('id' => $report->cmid, 'page' => $report->page, 'annoid' => $report->annotationid,
+            'commid' => $report->commentid)))->out();
         $report->reportedcomment = format_text($report->reportedcomment);
         $report->report = format_text($report->report);
     }
@@ -1375,7 +1400,8 @@ function pdfannotator_print_questions($questions, $thiscourse, $urlparams, $curr
     // $table->pageable(false);
     // Sort the entries of the table according to time or number of votes.
     if (!empty($sortinfo = $table->get_sort_columns())) {
-        $sortcriterium = pdfannotator_get_first_key_in_array($sortinfo); // Returns the name (e.g. col2) of the column which was clicked for sorting.
+        $sortcriterium = pdfannotator_get_first_key_in_array($sortinfo);
+        // Returns the name (e.g. col2) of the column which was clicked for sorting.
         $sortorder = $sortinfo[$sortcriterium]; // 3 for descending, 4 for ascending.
         $questions = pdfannotator_sort_questions($questions, $sortcriterium, $sortorder);
     }
@@ -1417,7 +1443,8 @@ function pdfannotator_print_answers($data, $thiscourse, $url, $currentpage, $ite
 
     // Sort the entries of the table according to time or number of votes.
     if (!empty($sortinfo = $table->get_sort_columns())) {
-        $sortcriterium = pdfannotator_get_first_key_in_array($sortinfo); // Returns the name (e.g. col2) of the column which was clicked for sorting.
+        $sortcriterium = pdfannotator_get_first_key_in_array($sortinfo);
+        // Returns the name (e.g. col2) of the column which was clicked for sorting.
         $sortorder = $sortinfo[$sortcriterium]; // 3 for descending, 4 for ascending.
         $data = pdfannotator_sort_answers($data, $sortcriterium, $sortorder);
     }
@@ -1460,7 +1487,8 @@ function pdfannotator_print_this_users_posts($posts, $thiscourse, $url, $current
 
     // Sort the entries of the table according to time or number of votes.
     if (!empty($sortinfo = $table->get_sort_columns())) {
-        $sortcriterium = pdfannotator_get_first_key_in_array($sortinfo); // Returns the name (e.g. col2) of the column which was clicked for sorting.
+        $sortcriterium = pdfannotator_get_first_key_in_array($sortinfo);
+        // Returns the name (e.g. col2) of the column which was clicked for sorting.
         $sortorder = $sortinfo[$sortcriterium]; // 3 for descending, 4 for ascending.
         $posts = pdfannotator_sort_entries($posts, $sortcriterium, $sortorder);
     }
@@ -1503,7 +1531,8 @@ function pdfannotator_print_reports($reports, $thiscourse, $url, $currentpage, $
     $table->setup();
     // Sort the entries of the table according to time or number of votes.
     if (!empty($sortinfo = $table->get_sort_columns())) {
-        $sortcriterium = pdfannotator_get_first_key_in_array($sortinfo); // Returns the name (e.g. col2) of the column which was clicked for sorting.
+        $sortcriterium = pdfannotator_get_first_key_in_array($sortinfo);
+        // Returns the name (e.g. col2) of the column which was clicked for sorting.
         $sortorder = $sortinfo[$sortcriterium]; // 3 for descending, 4 for ascending.
         $reports = pdfannotator_sort_reports($reports, $sortcriterium, $sortorder);
     }
@@ -1543,14 +1572,16 @@ function pdfannotator_questionstable_add_row($thiscourse, $table, $question, $ur
     if ($question->visibility == 'anonymous') {
         $author = get_string('anonymous', 'pdfannotator');
     } else {
-        $author = "<a href=" . $CFG->wwwroot . "/user/view.php?id=$question->userid&course=$thiscourse>" . pdfannotator_get_username($question->userid) . "</a>";
+        $author = "<a href=" . $CFG->wwwroot . "/user/view.php?id=$question->userid&course=$thiscourse>" .
+            pdfannotator_get_username($question->userid) . "</a>";
     }
     $time = pdfannotator_get_user_datetime_shortformat($question->timecreated);
     if (!empty($question->lastanswered)) { // ! ($question->lastanswered != $question->timecreated) {
         if ($question->lastuservisibility == 'anonymous') {
             $lastresponder = get_string('anonymous', 'pdfannotator');
         } else {
-            $lastresponder = "<a href=" . $CFG->wwwroot . "/user/view.php?id=$question->lastuser&course=$thiscourse>" . pdfannotator_get_username($question->lastuser) . "</a>";
+            $lastresponder = "<a href=" . $CFG->wwwroot . "/user/view.php?id=$question->lastuser&course=$thiscourse>" .
+                pdfannotator_get_username($question->lastuser) . "</a>";
         }
         $answertime = pdfannotator_timeago($question->lastanswered);
         $lastanswered = $lastresponder . "<br>" . $answertime;
@@ -1602,7 +1633,8 @@ function pdfannotator_answerstable_add_row($thiscourse, $table, $answer, $cmid, 
     if ($answer->visibility == 'anonymous') {
         $answeredby = get_string('anonymous', 'pdfannotator');
     } else {
-        $answeredby = "<a href=" . $CFG->wwwroot . "/user/view.php?id=$answer->userid&course=$thiscourse>" . pdfannotator_get_username($answer->userid) . "</a>";
+        $answeredby = "<a href=" . $CFG->wwwroot . "/user/view.php?id=$answer->userid&course=$thiscourse>" .
+            pdfannotator_get_username($answer->userid) . "</a>";
     }
     $answertime = pdfannotator_get_user_datetime_shortformat($answer->timemodified);
 
@@ -1618,9 +1650,11 @@ function pdfannotator_answerstable_add_row($thiscourse, $table, $answer, $cmid, 
     }
 
     $myrenderer = $PAGE->get_renderer('mod_pdfannotator');
-    $dropdown = $myrenderer->render_dropdownmenu(new answermenu($answer->annoid, $issubscribed, $cmid, $currentpage, $itemsperpage, $answerfilter));
+    $dropdown = $myrenderer->render_dropdownmenu(new answermenu($answer->annoid, $issubscribed, $cmid, $currentpage, $itemsperpage,
+        $answerfilter));
 
-    $table->add_data(array($answerlink, $checked, $answeredby . '<br>' . $answertime, $question, $pdfannotatorname, $dropdown), $classname);
+    $table->add_data(array($answerlink, $checked, $answeredby . '<br>' . $answertime, $question, $pdfannotatorname, $dropdown),
+        $classname);
 }
 
 /**
@@ -1660,9 +1694,11 @@ function pdfannotator_reportstable_add_row($thiscourse, $table, $report, $cmid, 
     // Prepare report data for display.
     $reportid = 'report_' . $report->reportid;
     $reportedcommmentlink = "<a id=$reportid href=$report->link class='more'>$report->reportedcomment</a>";
-    $writtenby = "<a href=" . $CFG->wwwroot . "/user/view.php?id=$report->commentauthor&course=$thiscourse>" . pdfannotator_get_username($report->commentauthor) . "</a>";
+    $writtenby = "<a href=" . $CFG->wwwroot . "/user/view.php?id=$report->commentauthor&course=$thiscourse>" .
+        pdfannotator_get_username($report->commentauthor) . "</a>";
     $commenttime = pdfannotator_get_user_datetime_shortformat($report->commenttime);
-    $reportedby = "<a href=" . $CFG->wwwroot . "/user/view.php?id=$report->reportinguser&course=$thiscourse>" . pdfannotator_get_username($report->reportinguser) . "</a>";
+    $reportedby = "<a href=" . $CFG->wwwroot . "/user/view.php?id=$report->reportinguser&course=$thiscourse>" .
+        pdfannotator_get_username($report->reportinguser) . "</a>";
     $reporttime = pdfannotator_get_user_datetime_shortformat($report->timecreated);
     $report->report = "<div class='more'>$report->report</div>";
 
@@ -1676,7 +1712,8 @@ function pdfannotator_reportstable_add_row($thiscourse, $table, $report, $cmid, 
     $dropdown = $myrenderer->render_dropdownmenu(new reportmenu($report, $cmid, $currentpage, $itemsperpage, $reportfilter));
 
     // Add a new row to the reports table.
-    $table->add_data(array($report->report, $reportedby . '<br>' . $reporttime, $reportedcommmentlink, $writtenby . '<br>' . $commenttime, $dropdown), $classname);
+    $table->add_data(array($report->report, $reportedby . '<br>' . $reporttime, $reportedcommmentlink, $writtenby . '<br>' .
+        $commenttime, $dropdown), $classname);
 }
 
 
@@ -1688,7 +1725,8 @@ function pdfannotator_reportstable_add_row($thiscourse, $table, $report, $cmid, 
  * @return string
  */
 function pdfannotator_timeago($timestamp) {
-    $strtime = array(get_string('second', 'pdfannotator'), get_string('minute', 'pdfannotator'), get_string('hour', 'pdfannotator'));
+    $strtime = array(get_string('second', 'pdfannotator'), get_string('minute', 'pdfannotator'),
+        get_string('hour', 'pdfannotator'));
     $strtime[] = get_string('day', 'pdfannotator');
     $strtime[] = get_string('month', 'pdfannotator');
     $strtime[] = get_string('year', 'pdfannotator');
@@ -1737,14 +1775,15 @@ function pdfannotator_optional_timeago($timestamp) {
 
 function pdfannotator_is_mobile_device() {
     $param = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_DEFAULT); // XXX How to filter, here?
-    return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $param);
+    return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|" .
+        "tablet|up\.browser|up\.link|webos|wos)/i", $param);
 }
 
 function pdfannotator_is_phone() {
     $param = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_DEFAULT); // XXX How to filter, here?
-    return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $param);
+    return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|" .
+        "tablet|up\.browser|up\.link|webos|wos)/i", $param);
 }
-
 
 function pdfannotator_get_last_answer($annotationid, $context) {
     global $DB;
@@ -1781,7 +1820,8 @@ function pdfannotator_can_see_comment($comment, $context) {
     }
 
     // Protected Comments are only displayed for the author and for the managers.
-    if ($question->visibility == "protected" && $USER->id != $question->userid && !has_capability('mod/pdfannotator:viewprotectedcomments', $context)) {
+    if ($question->visibility == "protected" && $USER->id != $question->userid &&
+        !has_capability('mod/pdfannotator:viewprotectedcomments', $context)) {
         return false;
     }
     return true;

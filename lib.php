@@ -333,7 +333,8 @@ function pdfannotator_get_file_info($browser, $areas, $course, $cm, $context, $f
             }
         }
         require_once("$CFG->dirroot/mod/pdfannotator/locallib.php");
-        return new pdfannotator_content_file_info($browser, $context, $storedfile, $urlbase, $areas[$filearea], true, true, true, false);
+        return new pdfannotator_content_file_info($browser, $context, $storedfile, $urlbase, $areas[$filearea], true, true, true,
+            false);
     }
 
     // Note: pdfannotator_intro handled in file_browser automatically.
@@ -395,7 +396,8 @@ function pdfannotator_pluginfile($course, $cm, $context, $filearea, $args, $forc
             if ($pdfannotator->legacyfiles != RESOURCELIB_LEGACYFILES_ACTIVE) {
                 return false;
             }
-            if (!$file = resourcelib_try_file_migration('/' . $relativepath, $cm->id, $cm->course, 'mod_pdfannotator', 'content', 0)) {
+            if (!$file = resourcelib_try_file_migration('/' . $relativepath, $cm->id, $cm->course, 'mod_pdfannotator',
+                'content', 0)) {
                 return false;
             }
             // File migrate - update flag.
@@ -443,7 +445,8 @@ function pdfannotator_export_contents($cm, $baseurl) {
         $file['filesize'] = $fileinfo->get_filesize();
         $file['mimetype'] = 'pdf';
         $file['fileurl'] = moodle_url::make_webservice_pluginfile_url(
-                    $context->id, 'mod_pdfannotator', 'content', '1', $fileinfo->get_filepath(), $fileinfo->get_filename())->out(false);
+                    $context->id, 'mod_pdfannotator', 'content', '1', $fileinfo->get_filepath(),
+                    $fileinfo->get_filename())->out(false);
         $file['timecreated'] = $fileinfo->get_timecreated();
         $file['timemodified'] = $fileinfo->get_timemodified();
         $file['sortorder'] = $fileinfo->get_sortorder();
@@ -600,8 +603,9 @@ function pdfannotator_get_recent_mod_activity(&$activities, &$index, $timestart,
         $groupselect = "";
     }
     $allnames = get_all_user_name_fields(true, 'u');
-    if (!$posts = $DB->get_records_sql("SELECT p.*,c.id, c.userid AS userid, c.visibility, c.content, c.timecreated, c.annotationid, c.isquestion,
-                                              $allnames, u.email, u.picture, u.imagealt, u.email, a.page
+    if (!$posts = $DB->get_records_sql("SELECT p.*,c.id, c.userid AS userid, c.visibility, c.content, c.timecreated,
+                                              c.annotationid, c.isquestion, $allnames, u.email, u.picture, u.imagealt, u.email,
+                                              a.page
                                          FROM {pdfannotator} p
                                               JOIN {pdfannotator_annotations} a ON  a.pdfannotatorid=p.id
                                               JOIN {pdfannotator_comments} c       ON  c.annotationid = a.id
@@ -689,7 +693,8 @@ function pdfannotator_print_recent_mod_activity($activity, $courseid, $detail, $
     } else {
         // $pictureoptions = [  'courseid' => $courseid, 'link' => $authorhidden, 'alttext' => $authorhidden, ];
         $pic = $OUTPUT->image_url('/u/f2');
-        $picture = '<img src="' . $pic . '" class="userpicture" alt="' . get_string('anonymous', 'pdfannotator') . '" width="35" height="35">';
+        $picture = '<img src="' . $pic . '" class="userpicture" alt="' . get_string('anonymous', 'pdfannotator') .
+            '" width="35" height="35">';
     }
     $output .= html_writer::tag('td', $picture, ['class' => 'userpicture', 'valign' => 'top']);
 
@@ -703,9 +708,11 @@ function pdfannotator_print_recent_mod_activity($activity, $courseid, $detail, $
         $aname = s($activity->name);
         $output .= $OUTPUT->image_icon('icon', $aname, $activity->type);
     }
-    $isquestion = ($content->isquestion) ? '<img src="' . $OUTPUT->image_url('t/message') . '" alt="' . get_string('question', 'pdfannotator')
-            . '" title="' . get_string('question', 'pdfannotator') . '"> ' : '';
-    $discussionurl = new moodle_url('/mod/pdfannotator/view.php', ['id' => $activity->cmid, 'page' => $content->page, 'annoid' => $content->id, 'commid' => $content->commid]);
+    $isquestion = ($content->isquestion) ? '<img src="' . $OUTPUT->image_url('t/message') . '" alt="' .
+        get_string('question', 'pdfannotator')  . '" title="' .
+        get_string('question', 'pdfannotator') . '"> ' : '';
+    $discussionurl = new moodle_url('/mod/pdfannotator/view.php', ['id' => $activity->cmid, 'page' => $content->page,
+        'annoid' => $content->id, 'commid' => $content->commid]);
     // $discussionurl->set_anchor('p' . $activity->content->id);
     $output .= html_writer::link($discussionurl, ($isquestion . $content->discussion));
     $output .= html_writer::end_div();
