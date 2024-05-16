@@ -69,14 +69,6 @@ function pdfannotator_supports($feature) {
     }
 }
 /**
- * Function currently unused.
- *
- * @return string
- */
-function mod_pdfannotator_before_standard_html_head() {
-
-}
-/**
  * Returns all other caps used in module
  * @return array
  */
@@ -816,3 +808,4 @@ function mod_pdfannotator_output_fragment_open_add_comment_editor($args) {
 
     return $out;
 }
+
