@@ -35,7 +35,7 @@ Feature: Annotate in a pdfannotator activity
     And I wait "1" seconds
     And I point at the pdfannotator canvas
     And I wait "1" seconds
-    And I set the field with xpath "//div[@id='id_pdfannotator_contenteditable']" to "This is a smurfing smurf"
+    And I set the field with xpath "//div[@class='pdfannotator-comment-list']//textarea" to "This is a smurfing smurf"
     And I click on "Create Annotation" "button"
     And I wait until the page is ready
     Then I should see "This is a smurfing smurf"
