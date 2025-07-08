@@ -1,3 +1,7 @@
+## 2025070803 v1.5.9
+* Improve version file for 4.4+
+* Annotation separation: Public Private and All comments
+
 ## 2025032500 v1.5.8
 * Hotfix: correct further trailing junk after parameter 
 * Versioning error fix
