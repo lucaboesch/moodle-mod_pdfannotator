@@ -66,6 +66,12 @@ $string['colorPicker'] = 'Pick a color';
 $string['comment'] = 'Comment';
 $string['commentDeleted'] = 'Comment has been deleted';
 $string['comments'] = 'Comments';
+// Annotation separation.
+$string['comments_icon_private'] = 'This comment is private';
+$string['comments_icon_public'] = 'This comment is public';
+$string['comments_text_all'] = 'Show all comments';
+$string['comments_text_private'] = 'Only show private comments (orange)';
+$string['comments_text_public'] = 'Only show public comments (blue)';
 $string['configmaxbytes'] = 'Maximum file size';
 $string['correct'] = 'correct';
 $string['count'] = 'count';
