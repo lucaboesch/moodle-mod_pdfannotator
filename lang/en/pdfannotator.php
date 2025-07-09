@@ -144,7 +144,10 @@ $string['error:redihideCommentsplayComment'] = 'An error occurred while re-inser
 $string['error:voteComment'] = 'An error has occurred while saving the vote.';
 $string['error'] = 'Error!';
 $string['eventreport_added'] = 'A comment was reported';
-
+$string['export_comments_csv'] = 'Export as CSV';
+$string['export_comments_csv_tooltip'] = 'Download comments as CSV file';
+$string['export_comments_pdf'] = 'Export as PDF';
+$string['export_comments_pdf_tooltip'] = 'Download comments as PDF file';
 $string['filenotfound'] = 'File not found, sorry.';
 $string['forward'] = 'Forward';
 $string['forwardedquestionhtml'] = '{$a->sender} forwarded the following question to you: <br /> <br />
