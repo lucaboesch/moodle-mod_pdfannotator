@@ -482,7 +482,9 @@ function startOverview(Y, __annotatorid, __cmid, __capabilities, __action) { // 
         var counter = 0;
         let mathjax = function () {
             if (typeof (MathJax) !== "undefined") {
-                MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
+                if (MathJax.Hub !== 'undefined') {
+                    MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
+                }
             } else if (counter < 10) {
                 counter++;
                 setTimeout(mathjax, 200);

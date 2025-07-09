@@ -87,7 +87,9 @@ function renderMathJax(node) {
     var counter = 0;
     let mathjax = function (node) {
         if (typeof (MathJax) !== "undefined") {
-            MathJax.Hub.Queue(['Typeset', MathJax.Hub, node]);
+            if (MathJax.Hub !== 'undefined') {
+                MathJax.Hub.Queue(['Typeset', MathJax.Hub, node]);
+            }
         } else if (counter < 30) {
             counter++;
             setTimeout(mathjax, 100);

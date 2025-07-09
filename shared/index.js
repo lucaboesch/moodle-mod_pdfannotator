@@ -10464,18 +10464,20 @@ function startIndex(
                                 function mathJaxAndShortenText(selector, divisor, click = false) {
                                     if (typeof MathJax !== 'undefined') {
                                         // Add the Mathjax-function and the shortenText function to the queue.
-                                        MathJax.Hub.Queue(
-                                            ['Typeset', MathJax.Hub],
-                                            [
-                                                function () {
-                                                    shortenTextDynamic(null, selector, divisor);
-                                                    if (click) {
-                                                        $(selector + ' .morelink').click();
-                                                    }
-                                                },
-                                                null,
-                                            ]
-                                        );
+                                        if (MathJax.Hub !== 'undefined') {
+                                            MathJax.Hub.Queue(
+                                                ['Typeset', MathJax.Hub],
+                                                [
+                                                    function () {
+                                                        shortenTextDynamic(null, selector, divisor);
+                                                        if (click) {
+                                                            $(selector + ' .morelink').click();
+                                                        }
+                                                    },
+                                                    null,
+                                                ]
+                                            );
+                                        }
                                     } else {
                                         shortenTextDynamic(null, selector, divisor);
                                         if (click) {
