@@ -82,8 +82,8 @@ function addDropdownNavigation(Y, __capabilities, __cmid) {
     };
 
 }
-
-function renderMathJax(node) {
+/***** Removing this function for Moodle 5 ****/
+/*function renderMathJax(node) {
     var counter = 0;
     let mathjax = function (node) {
         if (typeof (MathJax) !== "undefined") {
@@ -97,7 +97,7 @@ function renderMathJax(node) {
         }
     };
     mathjax(node);
-}
+}*/
 
 function fixCommentForm() {
     if ($('#comment-list-form').hasClass('fixtool')) {

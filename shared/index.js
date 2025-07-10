@@ -563,7 +563,7 @@ function startIndex(
                                         '</span>'
                                 );
                                 let comment = document.getElementById('comment_' + commentId);
-                                renderMathJax(comment);
+                                //renderMathJax(comment);
                                 notification.addNotification({
                                     message: M.util.get_string('successfullyHidden', 'pdfannotator'),
                                     type: 'success',
@@ -600,7 +600,7 @@ function startIndex(
                                 $('#comment_' + commentId).removeClass('dimmed_text'); // render chat box in grey.
                                 $('#taghidden' + commentId).remove();
                                 let comment = document.getElementById('comment_' + commentId);
-                                renderMathJax(comment);
+                                //renderMathJax(comment);
                                 notification.addNotification({
                                     message: M.util.get_string('successfullyRedisplayed', 'pdfannotator'),
                                     type: 'success',
@@ -2054,7 +2054,7 @@ function startIndex(
 
                                             let selector = '#comment_' + comment.uuid + ' .chat-message-text p';
                                             let element = document.querySelector(selector);
-                                            renderMathJax(element);
+                                            //renderMathJax(element);
                                         });
 
                                         //if the target has the attribute markCommentid a specific comment should be marked with an red border.
@@ -2253,7 +2253,7 @@ function startIndex(
                                         // No changes.
                                         editForm.style.display = 'none';
                                         chatMessage.innerHTML = comment.displaycontent;
-                                        renderMathJax(chatMessage);
+                                        //renderMathJax(chatMessage);
                                     } else {
                                         // Save changes.
                                         _2.default
@@ -2285,7 +2285,7 @@ function startIndex(
                                                     comment.content = newContent;
                                                     comment.displaycontent = newContent;
                                                     editTextarea = newContent;
-                                                    renderMathJax(chatMessage);
+                                                    //renderMathJax(chatMessage);
                                                     notification.addNotification({
                                                         message: M.util.get_string(
                                                             'successfullyEdited',
@@ -2326,7 +2326,7 @@ function startIndex(
                                         editAreaEditable.innerHTML = comment.displaycontent;
                                     }
                                     chatMessage.innerHTML = comment.displaycontent;
-                                    renderMathJax(chatMessage);
+                                    //renderMathJax(chatMessage);
                                 });
                             }
                         });
@@ -7098,7 +7098,7 @@ function startIndex(
                                     renderQuestions: _questionsRenderer.renderQuestions,
                                     renderAllQuestions: _questionsRenderer.renderAllQuestions,
                                     shortenTextDynamic: _shortText.shortenTextDynamic,
-                                    mathJaxAndShortenText: _shortText.mathJaxAndShortenText,
+                                    /*mathJaxAndShortenText: _shortText.mathJaxAndShortenText,*/
                                     loadNewAnnotations: _newAnnotations.load,
                                     loadEditor: _commentWrapper.loadEditor,
                                 };
@@ -10219,7 +10219,8 @@ function startIndex(
                                                             })(question, questionWrapper);
                                                         }
                                                         // comment overview column
-                                                        _shortText.mathJaxAndShortenText('.more', 4);
+                                                        //_shortText.mathJaxAndShortenText('.more', 4);
+                                                        _shortText.shortenTextDynamic(null, '.more', 4);
                                                     }
                                                 }
                                             },
@@ -10462,6 +10463,7 @@ function startIndex(
                                  * @returns {undefined}
                                  */
                                 function mathJaxAndShortenText(selector, divisor, click = false) {
+                                    /*
                                     if (typeof MathJax !== 'undefined') {
                                         // Add the Mathjax-function and the shortenText function to the queue.
                                         if (MathJax.Hub !== 'undefined') {
@@ -10483,7 +10485,7 @@ function startIndex(
                                         if (click) {
                                             $(selector + ' .morelink').click();
                                         }
-                                    }
+                                    }*/
                                 }
                             },
                             /* 40 */ /*OWN Module! To load new annotations (Synchronisation between sessions)*/

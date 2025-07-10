@@ -36,7 +36,7 @@ function startOverview(Y, __annotatorid, __cmid, __capabilities, __action) { // 
         }
 
         shortenTextOverview();
-        renderMathJax();
+        //renderMathJax();
 
         /************************** 2. Function definitions **************************/
 
@@ -477,8 +477,8 @@ function startOverview(Y, __annotatorid, __cmid, __capabilities, __action) { // 
             });
         });
     }
-
-    function renderMathJax() {
+/***** Removing this function for Moodle 5 ****/
+    /*function renderMathJax() {
         var counter = 0;
         let mathjax = function () {
             if (typeof (MathJax) !== "undefined") {
@@ -492,6 +492,6 @@ function startOverview(Y, __annotatorid, __cmid, __capabilities, __action) { // 
             }
         };
         mathjax();
-    }
+    }*/
 
 }
