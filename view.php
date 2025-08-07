@@ -35,7 +35,7 @@ $annoid = optional_param('annoid', null, PARAM_INT);
 $commid = optional_param('commid', null, PARAM_INT);
 
 if ($r) {
-    if (!$pdfannotator = $DB->get_record('pdfannotator', array('id' => $r))) {
+    if (!$pdfannotator = $DB->get_record('pdfannotator', ['id' => $r])) {
         throw new moodle_exception('invalidaccessparameter');
     }
     $cm = get_coursemodule_from_instance('pdfannotator', $pdfannotator->id, $pdfannotator->course, false, MUST_EXIST);
@@ -43,7 +43,7 @@ if ($r) {
     if (!$cm = get_coursemodule_from_id('pdfannotator', $id)) {
         throw new moodle_exception('invalidcoursemodule');
     }
-    $pdfannotator = $DB->get_record('pdfannotator', array('id' => $cm->instance), '*', MUST_EXIST);
+    $pdfannotator = $DB->get_record('pdfannotator', ['id' => $cm->instance], '*', MUST_EXIST);
 }
 
 $course = get_course($cm->course); // Get course by id.
@@ -58,7 +58,7 @@ $pdfannotator->name = format_text($pdfannotator->name, FORMAT_MOODLE, ['para' =>
 // Completion and trigger events.
 pdfannotator_view($pdfannotator, $course, $cm, $context);
 
-$PAGE->set_url('/mod/pdfannotator/view.php', array('id' => $cm->id));
+$PAGE->set_url('/mod/pdfannotator/view.php', ['id' => $cm->id]);
 
 $fs = get_file_storage();
 $files = $fs->get_area_files($context->id, 'mod_pdfannotator', 'content', 0, 'sortorder DESC, id ASC', false);// TODO Not efficient!

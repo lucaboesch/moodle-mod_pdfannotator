@@ -45,12 +45,12 @@ class pdfannotator_instance {
         $this->id = $dbrecord->id;
         $this->coursemodule = $dbrecord->coursemodule;
         $this->name = $dbrecord->name;
-        $this->answers = array();
-        $this->reports = array();
-        $this->unsolvedquestions = array();
-        $this->userposts = array();
-        $this->hiddenanswers = array();
-        $this->hiddenreports = array();
+        $this->answers = [];
+        $this->reports = [];
+        $this->unsolvedquestions = [];
+        $this->userposts = [];
+        $this->hiddenanswers = [];
+        $this->hiddenreports = [];
     }
 
     /*     * **************************** static methods ***************************** */
@@ -70,7 +70,7 @@ class pdfannotator_instance {
         $course = get_course($courseid);
         $result = get_all_instances_in_course('pdfannotator', $course);
 
-        $pdfannotatorlist = array();
+        $pdfannotatorlist = [];
 
         foreach ($result as $pdfannotator) {
             $pdfannotatorlist[] = new pdfannotator_instance($pdfannotator);
@@ -92,7 +92,7 @@ class pdfannotator_instance {
 
     public static function get_cm_info($courseid) {
         global $USER;
-        $info = array();
+        $info = [];
 
         $userid = $USER->id;
         $course = get_course($courseid);
@@ -102,7 +102,7 @@ class pdfannotator_instance {
         foreach ($instances as $instance) {
             $cmid = $instance->coursemodule;
             $cm = $modinfo->get_cm($cmid);
-            $cminfo = array();
+            $cminfo = [];
             $cminfo['visible'] = $cm->visible;
             $cminfo['availableinfo'] = $cm->availableinfo;
             $info[$cmid] = $cminfo;
@@ -112,7 +112,7 @@ class pdfannotator_instance {
 
     public static function use_votes($documentid) {
         global $DB;
-        return $DB->record_exists('pdfannotator', array('id' => $documentid, 'usevotes' => '1'));
+        return $DB->record_exists('pdfannotator', ['id' => $documentid, 'usevotes' => '1']);
     }
 
     /*     * **************************** (attribute) getter methods ***************************** */
@@ -137,7 +137,7 @@ class pdfannotator_instance {
                 . "ORDER BY a.page ASC";
 
         try {
-            $questions = $DB->get_records_sql($sql, array($pdfannotatorid));
+            $questions = $DB->get_records_sql($sql, [$pdfannotatorid]);
         } catch (Exception $ex) {
             return -1;
         }
@@ -163,7 +163,7 @@ class pdfannotator_instance {
                 . "WHERE c.pdfannotatorid = ? AND c.annotationid = ? AND NOT c.isquestion = 1 AND NOT c.isdeleted = 1";
 
             try {
-                $answers = $DB->get_records_sql($sql, array($pdfannotatorid, $question->annoid));
+                $answers = $DB->get_records_sql($sql, [$pdfannotatorid, $question->annoid]);
             } catch (Exception $ex) {
                 return -1;
             }

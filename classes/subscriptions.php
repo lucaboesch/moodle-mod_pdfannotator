@@ -50,7 +50,7 @@ class subscriptions {
      *
      * @var array[] An array of arrays.
      */
-    protected static $pdfannotatorcache = array();
+    protected static $pdfannotatorcache = [];
 
     /**
      * The list of pdfannotators which have been wholly retrieved for the pdfannotator subscription cache.
@@ -60,7 +60,7 @@ class subscriptions {
      *
      * @var bool[]
      */
-    protected static $fetchedpdfannotators = array();
+    protected static $fetchedpdfannotators = [];
 
     /**
      * The subscription cache for pdfannotator discussions.
@@ -72,7 +72,7 @@ class subscriptions {
      *
      * @var array[]
      */
-    protected static $pdfannotatordiscussioncache = array();
+    protected static $pdfannotatordiscussioncache = [];
 
     /**
      * The list of pdfannotators which have been wholly retrieved for the pdfannotator discussion subscription cache.
@@ -82,7 +82,7 @@ class subscriptions {
      *
      * @var bool[]
      */
-    protected static $discussionfetchedpdfannotators = array();
+    protected static $discussionfetchedpdfannotators = [];
 
     /**
      * Whether a user is subscribed to this pdfannotator, or a discussion within
@@ -183,7 +183,7 @@ class subscriptions {
      */
     public static function set_subscription_mode($pdfannotatorid, $status = 1) {
         global $DB;
-        return $DB->set_field("pdfannotator", "forcesubscribe", $status, array("id" => $pdfannotatorid));
+        return $DB->set_field("pdfannotator", "forcesubscribe", $status, ["id" => $pdfannotatorid]);
     }
 
     /**
@@ -207,10 +207,10 @@ class subscriptions {
         // Get courses that $USER is enrolled in and can see.
         $courses = enrol_get_my_courses();
         if (empty($courses)) {
-            return array();
+            return [];
         }
 
-        $courseids = array();
+        $courseids = [];
         foreach ($courses as $course) {
             $courseids[] = $course->id;
         }
@@ -228,14 +228,14 @@ class subscriptions {
                 AND fs.id IS NOT NULL
                 AND cm.course
                 $coursesql";
-        $params = array_merge($courseparams, array(
+        $params = array_merge($courseparams, [
             'modulename' => 'pdfannotator',
             'userid' => $USER->id,
             'forcesubscribe' => pdfannotator_FORCESUBSCRIBE,
-        ));
+        ]);
         $pdfannotators = $DB->get_recordset_sql($sql, $params);
 
-        $unsubscribablepdfannotators = array();
+        $unsubscribablepdfannotators = [];
         foreach ($pdfannotators as $pdfannotator) {
             if (empty($pdfannotator->visible)) {
                 // The pdfannotator is hidden - check if the user can view the pdfannotator.
@@ -318,26 +318,26 @@ class subscriptions {
             // This pdfannotator has not been fetched as a whole.
             if (isset($userid)) {
                 if (!isset(self::$pdfannotatorcache[$userid])) {
-                    self::$pdfannotatorcache[$userid] = array();
+                    self::$pdfannotatorcache[$userid] = [];
                 }
 
                 if (!isset(self::$pdfannotatorcache[$userid][$pdfannotatorid])) {
-                    if ($DB->record_exists('pdfannotator_subscriptions', array(
+                    if ($DB->record_exists('pdfannotator_subscriptions', [
                         'userid' => $userid,
                         'pdfannotator' => $pdfannotatorid,
-                    ))) {
+                    ])) {
                         self::$pdfannotatorcache[$userid][$pdfannotatorid] = true;
                     } else {
                         self::$pdfannotatorcache[$userid][$pdfannotatorid] = false;
                     }
                 }
             } else {
-                $subscriptions = $DB->get_recordset('pdfannotator_subscriptions', array(
+                $subscriptions = $DB->get_recordset('pdfannotator_subscriptions', [
                     'pdfannotator' => $pdfannotatorid,
-                ), '', 'id, userid');
+                ], '', 'id, userid');
                 foreach ($subscriptions as $id => $data) {
                     if (!isset(self::$pdfannotatorcache[$data->userid])) {
-                        self::$pdfannotatorcache[$data->userid] = array();
+                        self::$pdfannotatorcache[$data->userid] = [];
                     }
                     self::$pdfannotatorcache[$data->userid][$pdfannotatorid] = true;
                 }
@@ -359,7 +359,7 @@ class subscriptions {
         global $DB;
 
         if (!isset(self::$pdfannotatorcache[$userid])) {
-            self::$pdfannotatorcache[$userid] = array();
+            self::$pdfannotatorcache[$userid] = [];
         }
 
         $sql = "SELECT
@@ -370,11 +370,11 @@ class subscriptions {
                 WHERE f.course = :course
                 AND f.forcesubscribe <> :subscriptionforced";
 
-        $subscriptions = $DB->get_recordset_sql($sql, array(
+        $subscriptions = $DB->get_recordset_sql($sql, [
             'course' => $courseid,
             'userid' => $userid,
             'subscriptionforced' => pdfannotator_FORCESUBSCRIBE,
-        ));
+        ]);
 
         foreach ($subscriptions as $id => $data) {
             self::$pdfannotatorcache[$userid][$id] = !empty($data->subscriptionid);
@@ -490,7 +490,7 @@ class subscriptions {
 
         if (!isset(self::$pdfannotatordiscussioncache[$userid]) ||
             !isset(self::$pdfannotatordiscussioncache[$userid][$pdfannotatorid])) {
-            return array();
+            return [];
         }
 
         return self::$pdfannotatordiscussioncache[$userid][$pdfannotatorid];
@@ -513,16 +513,16 @@ class subscriptions {
             // This pdfannotator hasn't been fetched as a whole yet.
             if (isset($userid)) {
                 if (!isset(self::$pdfannotatordiscussioncache[$userid])) {
-                    self::$pdfannotatordiscussioncache[$userid] = array();
+                    self::$pdfannotatordiscussioncache[$userid] = [];
                 }
 
                 if (!isset(self::$pdfannotatordiscussioncache[$userid][$pdfannotatorid])) {
-                    $subscriptions = $DB->get_recordset('pdfannotator_discussion_subs', array(
+                    $subscriptions = $DB->get_recordset('pdfannotator_discussion_subs', [
                         'userid' => $userid,
                         'pdfannotator' => $pdfannotatorid,
-                    ), null, 'id, discussion, preference');
+                    ], null, 'id, discussion, preference');
 
-                    self::$pdfannotatordiscussioncache[$userid][$pdfannotatorid] = array();
+                    self::$pdfannotatordiscussioncache[$userid][$pdfannotatorid] = [];
                     foreach ($subscriptions as $id => $data) {
                         self::add_to_discussion_cache($pdfannotatorid, $userid, $data->discussion, $data->preference);
                     }
@@ -530,9 +530,9 @@ class subscriptions {
                     $subscriptions->close();
                 }
             } else {
-                $subscriptions = $DB->get_recordset('pdfannotator_discussion_subs', array(
+                $subscriptions = $DB->get_recordset('pdfannotator_discussion_subs', [
                     'pdfannotator' => $pdfannotatorid,
-                ), null, 'id, userid, discussion, preference');
+                ], null, 'id, userid, discussion, preference');
                 foreach ($subscriptions as $id => $data) {
                     self::add_to_discussion_cache($pdfannotatorid, $data->userid, $data->discussion, $data->preference);
                 }
@@ -553,11 +553,11 @@ class subscriptions {
      */
     protected static function add_to_discussion_cache($pdfannotatorid, $userid, $discussion, $preference) {
         if (!isset(self::$pdfannotatordiscussioncache[$userid])) {
-            self::$pdfannotatordiscussioncache[$userid] = array();
+            self::$pdfannotatordiscussioncache[$userid] = [];
         }
 
         if (!isset(self::$pdfannotatordiscussioncache[$userid][$pdfannotatorid])) {
-            self::$pdfannotatordiscussioncache[$userid][$pdfannotatorid] = array();
+            self::$pdfannotatordiscussioncache[$userid][$pdfannotatorid] = [];
         }
 
         self::$pdfannotatordiscussioncache[$userid][$pdfannotatorid][$discussion] = $preference;
@@ -570,8 +570,8 @@ class subscriptions {
      * checking pdfannotator discussion subscription states.
      */
     public static function reset_discussion_cache() {
-        self::$pdfannotatordiscussioncache = array();
-        self::$discussionfetchedpdfannotators = array();
+        self::$pdfannotatordiscussioncache = [];
+        self::$discussionfetchedpdfannotators = [];
     }
 
     /**
@@ -581,8 +581,8 @@ class subscriptions {
      * checking pdfannotator subscription states.
      */
     public static function reset_pdfannotator_cache() {
-        self::$pdfannotatorcache = array();
-        self::$fetchedpdfannotators = array();
+        self::$pdfannotatorcache = [];
+        self::$fetchedpdfannotators = [];
     }
 
     /**
@@ -611,14 +611,14 @@ class subscriptions {
         $result = $DB->insert_record("pdfannotator_subscriptions", $sub);
 
         if ($userrequest) {
-            $discussionsubscriptions = $DB->get_recordset('pdfannotator_discussion_subs', array('userid' => $userid,
-                'pdfannotator' => $pdfannotator->id));
+            $discussionsubscriptions = $DB->get_recordset('pdfannotator_discussion_subs', ['userid' => $userid,
+                'pdfannotator' => $pdfannotator->id]);
             $DB->delete_records_select('pdfannotator_discussion_subs',
-                    'userid = :userid AND pdfannotator = :pdfannotatorid AND preference <> :preference', array(
+                    'userid = :userid AND pdfannotator = :pdfannotatorid AND preference <> :preference', [
                         'userid' => $userid,
                         'pdfannotatorid' => $pdfannotator->id,
                         'preference' => self::PDFANNOTATOR_DISCUSSION_UNSUBSCRIBED,
-                    ));
+                    ]);
 
             // Reset the subscription caches for this pdfannotator.
             // We know that the there were previously entries and there aren't any more.
@@ -636,13 +636,13 @@ class subscriptions {
         self::$pdfannotatorcache[$userid][$pdfannotator->id] = true;
 
         $context = pdfannotator_get_context($pdfannotator->id, $context);
-        $params = array(
+        $params = [
             'context' => $context,
             'objectid' => $result,
             'relateduserid' => $userid,
-            'other' => array('pdfannotatorid' => $pdfannotator->id),
+            'other' => ['pdfannotatorid' => $pdfannotator->id],
 
-        );
+        ];
         $event  = event\subscription_created::create($params);
         if ($userrequest && $discussionsubscriptions) {
             foreach ($discussionsubscriptions as $subscription) {
@@ -669,25 +669,25 @@ class subscriptions {
     public static function unsubscribe_user($userid, $pdfannotator, $context = null, $userrequest = false) {
         global $DB;
 
-        $sqlparams = array(
+        $sqlparams = [
             'userid' => $userid,
             'pdfannotator' => $pdfannotator->id,
-        );
+        ];
         $DB->delete_records('pdfannotator_digests', $sqlparams);
 
         if ($pdfannotatorsubscription = $DB->get_record('pdfannotator_subscriptions', $sqlparams)) {
-            $DB->delete_records('pdfannotator_subscriptions', array('id' => $pdfannotatorsubscription->id));
+            $DB->delete_records('pdfannotator_subscriptions', ['id' => $pdfannotatorsubscription->id]);
 
             if ($userrequest) {
                 $discussionsubscriptions = $DB->get_recordset('pdfannotator_discussion_subs', $sqlparams);
                 $DB->delete_records('pdfannotator_discussion_subs',
-                        array('userid' => $userid, 'pdfannotator' => $pdfannotator->id,
-                            'preference' => self::PDFANNOTATOR_DISCUSSION_UNSUBSCRIBED));
+                        ['userid' => $userid, 'pdfannotator' => $pdfannotator->id,
+                            'preference' => self::PDFANNOTATOR_DISCUSSION_UNSUBSCRIBED]);
 
                 // We know that the there were previously entries and there aren't any more.
                 if (isset(self::$pdfannotatordiscussioncache[$userid]) &&
                     isset(self::$pdfannotatordiscussioncache[$userid][$pdfannotator->id])) {
-                    self::$pdfannotatordiscussioncache[$userid][$pdfannotator->id] = array();
+                    self::$pdfannotatordiscussioncache[$userid][$pdfannotator->id] = [];
                 }
             }
 
@@ -695,13 +695,13 @@ class subscriptions {
             self::$pdfannotatorcache[$userid][$pdfannotator->id] = false;
 
             $context = pdfannotator_get_context($pdfannotator->id, $context);
-            $params = array(
+            $params = [
                 'context' => $context,
                 'objectid' => $pdfannotatorsubscription->id,
                 'relateduserid' => $userid,
-                'other' => array('pdfannotatorid' => $pdfannotator->id),
+                'other' => ['pdfannotatorid' => $pdfannotator->id],
 
-            );
+            ];
             $event = event\subscription_deleted::create($params);
             $event->add_record_snapshot('pdfannotator_subscriptions', $pdfannotatorsubscription);
             if ($userrequest && $discussionsubscriptions) {
@@ -729,8 +729,8 @@ class subscriptions {
         global $DB;
 
         // First check whether the user is subscribed to the discussion already.
-        $subscription = $DB->get_record('pdfannotator_discussion_subs', array('userid' => $userid,
-            'discussion' => $discussion->id));
+        $subscription = $DB->get_record('pdfannotator_discussion_subs', ['userid' => $userid,
+            'discussion' => $discussion->id]);
         if ($subscription) {
             if ($subscription->preference != self::PDFANNOTATOR_DISCUSSION_UNSUBSCRIBED) {
                 // The user is already subscribed to the discussion. Ignore.
@@ -738,12 +738,12 @@ class subscriptions {
             }
         }
         // No discussion-level subscription. Check for a pdfannotator level subscription.
-        if ($DB->record_exists('pdfannotator_subscriptions', array('userid' => $userid,
-            'pdfannotator' => $discussion->pdfannotator))) {
+        if ($DB->record_exists('pdfannotator_subscriptions', ['userid' => $userid,
+            'pdfannotator' => $discussion->pdfannotator])) {
             if ($subscription && $subscription->preference == self::PDFANNOTATOR_DISCUSSION_UNSUBSCRIBED) {
                 // The user is subscribed to the pdfannotator, but unsubscribed from the discussion, delete the discussion
                 // preference.
-                $DB->delete_records('pdfannotator_discussion_subs', array('id' => $subscription->id));
+                $DB->delete_records('pdfannotator_discussion_subs', ['id' => $subscription->id]);
                 unset(self::$pdfannotatordiscussioncache[$userid][$discussion->pdfannotator][$discussion->id]);
             } else {
                 // The user is already subscribed to the pdfannotator. Ignore.
@@ -766,16 +766,16 @@ class subscriptions {
         }
 
         $context = pdfannotator_get_context($discussion->pdfannotator, $context);
-        $params = array(
+        $params = [
             'context' => $context,
             'objectid' => $subscription->id,
             'relateduserid' => $userid,
-            'other' => array(
+            'other' => [
                 'pdfannotatorid' => $discussion->pdfannotator,
                 'discussion' => $discussion->id,
-            ),
+            ],
 
-        );
+        ];
         $event  = event\discussion_subscription_created::create($params);
         $event->trigger();
 
@@ -794,8 +794,8 @@ class subscriptions {
         global $DB;
 
         // First check whether the user's subscription preference for this discussion.
-        $subscription = $DB->get_record('pdfannotator_discussion_subs', array('userid' => $userid,
-            'discussion' => $discussion->id));
+        $subscription = $DB->get_record('pdfannotator_discussion_subs', ['userid' => $userid,
+            'discussion' => $discussion->id]);
         if ($subscription) {
             if ($subscription->preference == self::PDFANNOTATOR_DISCUSSION_UNSUBSCRIBED) {
                 // The user is already unsubscribed from the discussion. Ignore.
@@ -803,12 +803,12 @@ class subscriptions {
             }
         }
         // No discussion-level preference. Check for a pdfannotator level subscription.
-        if (!$DB->record_exists('pdfannotator_subscriptions', array('userid' => $userid,
-            'pdfannotator' => $discussion->pdfannotator))) {
+        if (!$DB->record_exists('pdfannotator_subscriptions', ['userid' => $userid,
+            'pdfannotator' => $discussion->pdfannotator])) {
             if ($subscription && $subscription->preference != self::PDFANNOTATOR_DISCUSSION_UNSUBSCRIBED) {
                 // The user is not subscribed to the pdfannotator, but subscribed from the discussion, delete the discussion
                 // subscription.
-                $DB->delete_records('pdfannotator_discussion_subs', array('id' => $subscription->id));
+                $DB->delete_records('pdfannotator_discussion_subs', ['id' => $subscription->id]);
                 unset(self::$pdfannotatordiscussioncache[$userid][$discussion->pdfannotator][$discussion->id]);
             } else {
                 // The user is not subscribed from the pdfannotator. Ignore.
@@ -831,16 +831,16 @@ class subscriptions {
         }
 
         $context = pdfannotator_get_context($discussion->pdfannotator, $context);
-        $params = array(
+        $params = [
             'context' => $context,
             'objectid' => $subscription->id,
             'relateduserid' => $userid,
-            'other' => array(
+            'other' => [
                 'pdfannotatorid' => $discussion->pdfannotator,
                 'discussion' => $discussion->id,
-            ),
+            ],
 
-        );
+        ];
         $event  = event\discussion_subscription_deleted::create($params);
         $event->trigger();
 

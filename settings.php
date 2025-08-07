@@ -51,7 +51,7 @@ if ($ADMIN->fulltree) {
             get_string('global_setting_use_protected_comments_desc', 'pdfannotator'), 0));
 
     // Define what API to use for converting latex formulas into png.
-    $options = array();
+    $options = [];
     $options[LATEX_TO_PNG_MOODLE] = get_string("global_setting_latexusemoodle", "pdfannotator");
     $options[LATEX_TO_PNG_GOOGLE_API] = get_string("global_setting_latexusegoogle", "pdfannotator");
     $settings->add(new admin_setting_configselect('mod_pdfannotator/latexapi', get_string('global_setting_latexapisetting',
