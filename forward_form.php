@@ -22,6 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
@@ -33,6 +34,12 @@ require_once($CFG->libdir . '/formslib.php');
  */
 class pdfannotator_forward_form extends moodleform {
 
+    /**
+     * Define the form elements.
+     *
+     * @return void
+     * @throws coding_exception
+     */
     public function definition() {
         global $CFG;
 
@@ -81,6 +88,11 @@ class pdfannotator_forward_form extends moodleform {
         $this->add_action_buttons($cancel = true, get_string('send', 'pdfannotator'));
     }
 
+    /**
+     * Display the form.
+     *
+     * @return void
+     */
     public function display() {
         $this->_form->display();
     }

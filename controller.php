@@ -15,15 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Controller script for the pdfannotator module.
+ *
  * @package   mod_pdfannotator
  * @copyright 2018 RWTH Aachen (see README.md)
  * @author    Anna Heynkes, Friederike Schwager
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use mod_pdfannotator\output\statistics;
-
 defined('MOODLE_INTERNAL') || die();
+
+use mod_pdfannotator\output\statistics;
 
 $action = optional_param('action', 'view', PARAM_ALPHA); // The default action is 'view'.
 

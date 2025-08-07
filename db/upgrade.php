@@ -22,8 +22,18 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
-defined('MOODLE_INTERNAL') || die;
 
+/**
+ * Upgrade function for the pdfannotator module.
+ *
+ * @param int $oldversion
+ * @return true
+ * @throws ddl_change_structure_exception
+ * @throws ddl_exception
+ * @throws ddl_field_missing_exception
+ * @throws ddl_table_missing_exception
+ * @throws dml_exception
+ */
 function xmldb_pdfannotator_upgrade($oldversion) {
 
     global $CFG, $DB;
@@ -644,7 +654,6 @@ function xmldb_pdfannotator_upgrade($oldversion) {
         // Pdfannotator savepoint reached.
         upgrade_mod_savepoint(true, 2022110200, 'pdfannotator');
     }
-
 
     if ($oldversion < 2025080700) {
 

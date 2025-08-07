@@ -24,8 +24,6 @@
 
 namespace mod_pdfannotator;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Pdfannotator subscription manager.
  *

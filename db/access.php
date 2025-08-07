@@ -47,7 +47,7 @@ $capabilities = [
         'clonepermissionsfrom' => 'moodle/course:manageactivities',
     ],
 
-    'mod/pdfannotator:administrateuserinput' =>  [
+    'mod/pdfannotator:administrateuserinput' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -56,7 +56,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:create' =>  [ // Create annotation or comment.
+    'mod/pdfannotator:create' => [ // Create annotation or comment.
         'riskbitmask' => RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
@@ -68,7 +68,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:deleteown' =>  [ // Delete own comments or annotations.
+    'mod/pdfannotator:deleteown' => [ // Delete own comments or annotations.
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -79,7 +79,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:deleteany' =>  [ // Delete all comments or annotations (including comments/annotations by other users).
+    'mod/pdfannotator:deleteany' => [ // Delete all comments or annotations (including comments/annotations by other users).
         'riskbitmask' => RISK_DATALOSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
@@ -89,7 +89,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:hidecomments' =>  [
+    'mod/pdfannotator:hidecomments' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -99,7 +99,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:seehiddencomments' =>  [
+    'mod/pdfannotator:seehiddencomments' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -109,7 +109,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:edit' =>  [ // Update/Edit own annotations or comments.
+    'mod/pdfannotator:edit' => [ // Update/Edit own annotations or comments.
         'riskbitmask' => RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
@@ -131,7 +131,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:report' =>  [ // Report comments.
+    'mod/pdfannotator:report' => [ // Report comments.
         'riskbitmask' => RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
@@ -142,7 +142,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:vote' =>  [ // Give an interesting question or a helpful comment your vote.
+    'mod/pdfannotator:vote' => [ // Give an interesting question or a helpful comment your vote.
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -153,7 +153,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:subscribe' =>  [ // Subscribe to a question for notifications about new answers.
+    'mod/pdfannotator:subscribe' => [ // Subscribe to a question for notifications about new answers.
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -164,7 +164,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:closequestion' =>  [ // Close/Open own questions.
+    'mod/pdfannotator:closequestion' => [ // Close/Open own questions.
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -195,7 +195,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:usetextbox' =>  [ // Always use textbox (even if using textbox (for students) is disabled in settings).
+    'mod/pdfannotator:usetextbox' => [ // Always use textbox (even if using textbox (for students) is disabled in settings).
         'riskbitmask' => RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
@@ -206,7 +206,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:usedrawing' =>  [ // Always use drawing (even if using textbox (for students) is disabled in settings).
+    'mod/pdfannotator:usedrawing' => [ // Always use drawing (even if using textbox (for students) is disabled in settings).
         'riskbitmask' => RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
@@ -217,7 +217,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:printdocument' =>  [ // Download the pdf document.
+    'mod/pdfannotator:printdocument' => [ // Download the pdf document.
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -227,7 +227,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:printcomments' =>  [ // Download a pdf with all comments in this document.
+    'mod/pdfannotator:printcomments' => [ // Download a pdf with all comments in this document.
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -237,7 +237,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:forwardquestions' =>  [ // Forward a question (to an other teacher/manager).
+    'mod/pdfannotator:forwardquestions' => [ // Forward a question (to an other teacher/manager).
         'riskbitmask' => RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
@@ -248,7 +248,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:getforwardedquestions' =>  [ // Receive forwarded questions.
+    'mod/pdfannotator:getforwardedquestions' => [ // Receive forwarded questions.
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -260,7 +260,7 @@ $capabilities = [
 
 
     // Get a notification about new questions.
-    'mod/pdfannotator:recievenewquestionnotifications' =>  [
+    'mod/pdfannotator:recievenewquestionnotifications' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -271,7 +271,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:viewstatistics' =>  [ // View statistics page.
+    'mod/pdfannotator:viewstatistics' => [ // View statistics page.
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -282,7 +282,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:viewteacherstatistics' =>  [ // See additional information on statistics page.
+    'mod/pdfannotator:viewteacherstatistics' => [ // See additional information on statistics page.
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -296,7 +296,7 @@ $capabilities = [
     /* ********************** capabilities for viewing the overview page **********************/
 
     // View reports of comments.
-    'mod/pdfannotator:viewreports' =>  [
+    'mod/pdfannotator:viewreports' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -307,7 +307,7 @@ $capabilities = [
     ],
 
     // View answers to questions you wrote or subscribed to.
-    'mod/pdfannotator:viewanswers' =>  [
+    'mod/pdfannotator:viewanswers' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -316,7 +316,7 @@ $capabilities = [
     ],
 
     // View all questions that are new in this course.
-    'mod/pdfannotator:viewquestions' =>  [
+    'mod/pdfannotator:viewquestions' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -328,7 +328,7 @@ $capabilities = [
     ],
 
     // View all self-written posts, be it questions or comments.
-    'mod/pdfannotator:viewposts' =>  [
+    'mod/pdfannotator:viewposts' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -339,7 +339,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:viewprotectedcomments' =>  [
+    'mod/pdfannotator:viewprotectedcomments' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -349,7 +349,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:writeprivatecomments' =>  [
+    'mod/pdfannotator:writeprivatecomments' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -360,7 +360,7 @@ $capabilities = [
         ],
     ],
 
-    'mod/pdfannotator:writeprotectedcomments' =>  [
+    'mod/pdfannotator:writeprotectedcomments' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [

@@ -22,18 +22,37 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * This class contains functions returning the data for the statistics-tab
  */
 class pdfannotator_statistics {
 
+    /**
+     * @var int
+     */
     private $courseid;
+    /**
+     * @var int
+     */
     private $annotatorid;
+    /**
+     * @var int
+     */
     private $userid;
+    /**
+     * @var false|mixed
+     */
     private $isteacher;
 
+    /**
+     * Constructor for the statistics class.
+     *
+     * @param int $courseid
+     * @param int $annotatorid
+     * @param int $userid
+     * @param bool $isteacher
+     */
     public function __construct($courseid, $annotatorid, $userid, $isteacher = false) {
         $this->annotatorid = $annotatorid;
         $this->courseid = $courseid;
@@ -43,9 +62,10 @@ class pdfannotator_statistics {
 
     /**
      * Returns the number of questions/answers in one PDF-Annotator by one/all users
-     * @param type $isquestion  '1' for questions, '0' for answers
-     * @param type $user   false by default for comments by all users. True for comments by the user
-     * @return type
+     *
+     * @param int $isquestion '1' for questions, '0' for answers
+     * @param bool $user false by default for comments by all users. True for comments by the user
+     * @return int The count of comments.
      */
     public function get_comments_annotator($isquestion, $user = false) {
         global $DB;
@@ -60,9 +80,10 @@ class pdfannotator_statistics {
 
     /**
      * Returns the number of questions/answers in all PDF-Annotators in one course by one/all users
-     * @param type $isquestion  '1' for questions, '0' for answers
-     * @param type $user false by default for comments by all users. userid for comments by a specific user
-     * @return type
+     *
+     * @param int $isquestion '1' for questions, '0' for answers
+     * @param bool $user false by default for comments by all users. userid for comments by a specific user
+     * @return int The count of comments.
      */
     public function get_comments_course($isquestion, $user = false) {
         global $DB;
@@ -77,7 +98,8 @@ class pdfannotator_statistics {
     /**
      * Returns the average number of questions/answers a user wrote in this pdf-annotator.
      * Only users that wrote at least one comment are included.
-     * @param type $isquestion '1' for questions, '0' for answers
+     *
+     * @param int $isquestion '1' for questions, '0' for answers
      * @return float
      */
     public function get_comments_average_annotator($isquestion) {
@@ -93,7 +115,8 @@ class pdfannotator_statistics {
     /**
      * Returns the average number of questions/answers a user wrote in this course.
      * Only users that wrote at least one comment are included.
-     * @param type $isquestion '1' for questions, '0' for answers
+     *
+     * @param int $isquestion '1' for questions, '0' for answers
      * @return float
      */
     public function get_comments_average_course($isquestion) {
@@ -109,7 +132,8 @@ class pdfannotator_statistics {
 
     /**
      * Returns the number of reported comments in this annotator.
-     * @return type
+     *
+     * @return object
      */
     public function get_reports_annotator() {
         global $DB;
@@ -118,7 +142,8 @@ class pdfannotator_statistics {
 
     /**
      * Returns the number of reported comments in this course.
-     * @return type
+     *
+     * @return object
      */
     public function get_reports_course() {
         global $DB;
@@ -127,6 +152,7 @@ class pdfannotator_statistics {
 
     /**
      * Returns the data for the tabl in the statistics-tab
+     *
      * @return array
      */
     public function get_tabledata() {
@@ -171,8 +197,8 @@ class pdfannotator_statistics {
 
     /**
      * Returns the data for the chart in the statistics-tab.
-     * @param type $pdfannotators
-     * @return type
+     *
+     * @return array
      */
     public function get_chartdata() {
 
@@ -223,10 +249,11 @@ class pdfannotator_statistics {
 
     /**
      * Returns the number of all questions/answers in one PDF-Annotator by one/all users
-     * @param type $annotatorid
-     * @param type $isquestion '1' for questions, '0' for answers
-     * @param type $userid false by default for comments by all users. Userid for comments by a specific user
-     * @return float
+     *
+     * @param int $annotatorid The ID of the PDF annotator.
+     * @param int $isquestion '1' for questions, '0' for answers
+     * @param int $userid false by default for comments by all users. Userid for comments by a specific user
+     * @return int The count of comments.
      */
     public static function count_comments_annotator($annotatorid, $isquestion, $userid = false) {
         global $DB;
@@ -241,6 +268,11 @@ class pdfannotator_statistics {
 
     /**
      * Count private comments for annotator.
+     *
+     * @param int $annotatorid The ID of the PDF annotator.
+     * @param bool $isquestion True if counting questions, false for answers.
+     * @param int $userid The ID of the user to filter by, false for all users.
+     * @return int The count of private comments.
      */
     public function count_private_comments($annotatorid, $isquestion, $userid=false) {
         global $DB;
@@ -267,6 +299,15 @@ class pdfannotator_statistics {
         return $count;
     }
 
+    /**
+     * Count protected comments for annotator.
+     *
+     * @param int $annotatorid
+     * @param bool $isquestion
+     * @param int $userid
+     * @return int
+     * @throws dml_exception
+     */
     public function count_protected_comments($annotatorid, $isquestion, $userid=false) {
         global $DB;
         if ($isquestion) {
@@ -293,6 +334,11 @@ class pdfannotator_statistics {
 
     }
 
+    /**
+     * Count private comments for annotator.
+     *
+     * @return object
+     */
     public function count_private_comments_in_course() {
         global $DB;
         $sql = "SELECT COUNT(*) FROM {pdfannotator_comments} c JOIN {pdfannotator} a ON "
@@ -300,6 +346,13 @@ class pdfannotator_statistics {
         return $DB->count_records_sql($sql, [$this->courseid, "private", '0']);
     }
 
+
+    /**
+     * Count protected comments in course.
+     *
+     * @return int
+     * @throws dml_exception
+     */
     public function count_protected_comments_in_course() {
         global $DB;
         $sql = "SELECT COUNT(*) FROM {pdfannotator_comments} c JOIN {pdfannotator} a ON "

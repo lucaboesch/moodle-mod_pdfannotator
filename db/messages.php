@@ -26,9 +26,9 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-$messageproviders =  [
+$messageproviders = [
 
-    'newquestion' =>  [
+    'newquestion' => [
         'capability'  => 'mod/pdfannotator:recievenewquestionnotifications', // All capabilities.
         'defaults' => [
             'popup' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_ENABLED,
@@ -37,17 +37,17 @@ $messageproviders =  [
     ],
 
     // Concerns answers to questions the student subscribed to.
-    'newanswer' =>  [
+    'newanswer' => [
         'capability'  => 'mod/pdfannotator:viewanswers', // Student capability.
     ],
 
     // Notify teacher about a newly reported comment.
-    'newreport' =>  [
+    'newreport' => [
         'capability'  => 'mod/pdfannotator:viewreports', // Teacher capability.
     ],
 
     // Notify when receiving a forwarded question.
-    'forwardedquestion' =>  [
+    'forwardedquestion' => [
         'capability'  => 'mod/pdfannotator:getforwardedquestions', // Teacher capability.
     ],
 

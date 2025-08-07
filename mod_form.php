@@ -21,16 +21,25 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
-if (!defined('MOODLE_INTERNAL')) {
-    die('Direct access to this script is forbidden.');    // It must be included from a Moodle page.
-}
+
+defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
 require_once($CFG->dirroot . '/mod/pdfannotator/lib.php');
 require_once($CFG->libdir . '/filelib.php');
 
+/**
+ * Form definition class for the pdfannotator module.
+ */
 class mod_pdfannotator_mod_form extends moodleform_mod {
 
+    /**
+     * Define the form elements.
+     *
+     * @return void
+     * @throws coding_exception
+     * @throws dml_exception
+     */
     public function definition() {
 
         global $CFG, $USER, $COURSE;
@@ -143,7 +152,12 @@ class mod_pdfannotator_mod_form extends moodleform_mod {
         $mform->setDefault('revision', 1);
     }
 
-    // Loads the old file in the filemanager.
+    /**
+     * Preprocesses the form data before displaying it.
+     *
+     * @param array $defaultvalues
+     * @return void
+     */
     public function data_preprocessing(&$defaultvalues) {
         if ($this->current->instance) {
             $contextid = $this->context->id;
@@ -154,6 +168,14 @@ class mod_pdfannotator_mod_form extends moodleform_mod {
         }
     }
 
+    /**
+     * Validates the form data.
+     *
+     * @param array $data
+     * @param array $files
+     * @return array
+     * @throws coding_exception
+     */
     public function validation($data, $files) {
         global $USER;
 

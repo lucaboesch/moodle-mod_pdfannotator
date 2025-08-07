@@ -15,11 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * View script for the pdfannotator module.
+ *
  * @package   mod_pdfannotator
  * @copyright 2018 RWTH Aachen (see README.md)
  * @author    Ahmad Obeid, Anna Heynkes
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 require('../../config.php');
 require_once($CFG->dirroot . '/mod/pdfannotator/locallib.php'); // Requires lib.php in turn.
 require_once($CFG->libdir . '/completionlib.php');
@@ -61,6 +64,7 @@ pdfannotator_view($pdfannotator, $course, $cm, $context);
 $PAGE->set_url('/mod/pdfannotator/view.php', ['id' => $cm->id]);
 
 $fs = get_file_storage();
+// phpcs:disable moodle.Commenting.TodoComment
 $files = $fs->get_area_files($context->id, 'mod_pdfannotator', 'content', 0, 'sortorder DESC, id ASC', false);// TODO Not efficient!
 if (count($files) < 1) {
     pdfannotator_print_filenotfound($pdfannotator, $cm, $course);

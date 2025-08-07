@@ -29,20 +29,43 @@ use stdClass;
  * @copyright IT Center RWTH Aachen University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider_test extends provider_testcase {
+final class provider_test extends provider_testcase {
 
+    /**
+     * @var stdClass
+     */
     protected $course;
+    /**
+     * @var \core\context\module|false
+     */
     protected $cmcontext;
+    /**
+     * @var stdClass
+     */
     protected $user;
+    /**
+     * @var stdClass
+     */
     protected $pdffile;
+    /**
+     * @var stdClass
+     */
     protected $annotations;
+    /**
+     * @var stdClass
+     */
     protected $questions;
+    /**
+     * @var stdClass
+     */
     protected $answers;
 
     public function setUp(): void {
         global $DB;
 
         $this->resetAfterTest();
+
+        parent::setUp();
 
         // Create a course.
         $generator = $this->getDataGenerator();
@@ -115,7 +138,15 @@ class provider_test extends provider_testcase {
         $this->answers[] = $answer;
     }
 
-    public function test_delete_data_for_users() {
+    /**
+     * Test the get_users_in_context method.
+     *
+     * @covers \mod_pdfannotator\privacy\provider::get_users_in_context
+     * @return void
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public function test_delete_data_for_users(): void {
         global $DB;
 
         $this->resetAfterTest();

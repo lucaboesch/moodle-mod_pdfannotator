@@ -31,16 +31,48 @@ require_once($CFG->dirroot . '/mod/pdfannotator/renderable.php');
  */
 class pdfannotator_instance {
 
+    /**
+     * @var int
+     */
     private $id;
+    /**
+     * @var cm_info
+     */
     private $coursemodule;
+    /**
+     * @var string
+     */
     private $name;
+    /**
+     * @var array
+     */
     private $answers; // Questions asked by the current users.
+    /**
+     * @var array
+     */
     private $unsolvedquestions;
+    /**
+     * @var array
+     */
     private $reports;
+    /**
+     * @var array
+     */
     private $userposts;
+    /**
+     * @var array
+     */
     private $hiddenanswers;
+    /**
+     * @var array
+     */
     private $hiddenreports;
 
+    /**
+     * Constructor for the pdfannotator class.
+     *
+     * @param stdClass $dbrecord
+     */
     public function __construct($dbrecord) {
         $this->id = $dbrecord->id;
         $this->coursemodule = $dbrecord->coursemodule;
@@ -59,8 +91,8 @@ class pdfannotator_instance {
      * This method returns an array containing one pdfannotator_instance object
      * for each annotator in the specified course.
      *
-     * @param type $courseid
-     * @param type $beginwith optional parameter that specifies the (current) pdfannotator that should come first in the list
+     * @param int $courseid ID of the course
+     * @param int $beginwith optional parameter that specifies the (current) pdfannotator that should come first in the list
      * @return \pdfannotator_instance: array of pdfannotator_instance objects
      */
     public static function get_pdfannotator_instances($courseid, $beginwith = null) {
@@ -90,6 +122,14 @@ class pdfannotator_instance {
         return $pdfannotatorlist;
     }
 
+    /**
+     * Returns an array containing information about the course modules
+     *
+     * @param int $courseid
+     * @return array
+     * @throws dml_exception
+     * @throws moodle_exception
+     */
     public static function get_cm_info($courseid) {
         global $USER;
         $info = [];
@@ -110,6 +150,13 @@ class pdfannotator_instance {
         return $info;
     }
 
+    /**
+     * Checks if the pdfannotator instance with the given document ID uses votes.
+     *
+     * @param int $documentid
+     * @return bool
+     * @throws dml_exception
+     */
     public static function use_votes($documentid) {
         global $DB;
         return $DB->record_exists('pdfannotator', ['id' => $documentid, 'usevotes' => '1']);
@@ -117,14 +164,33 @@ class pdfannotator_instance {
 
     /*     * **************************** (attribute) getter methods ***************************** */
 
+    /**
+     * Returns the ID of the pdfannotator instance.
+     *
+     * @return mixed
+     */
     public function get_id() {
         return $this->id;
     }
 
+    /**
+     * Returns the name of the pdfannotator instance.
+     *
+     * @return mixed
+     */
     public function get_name() {
         return $this->name;
     }
 
+    /**
+     * Returns the conversations of the pdfannotator instance.
+     *
+     * @param int $pdfannotatorid
+     * @param context $context
+     * @return array|int
+     * @throws coding_exception
+     * @throws dml_exception
+     */
     public static function get_conversations($pdfannotatorid, $context) {
 
         global $DB;

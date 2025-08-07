@@ -27,17 +27,19 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
-defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Class pdfannotator_annotation
+ */
 class pdfannotator_annotation {
 
     /**
      * This method creates a new record in the database table named mdl_pdfannotator_annotations and returns its id
      *
-     * @param type $documentid specifies the pdf file to which this annotation belongs
-     * @param type $pageid specifies the page within that pdf file
-     * @param type $type child class (highlight, strikeout, area, textbox, drawing, comment or point)
-     * @param type $itemid identifies the record in the respective child class table, e.g. highlights
+     * @param int $documentid specifies the pdf file to which this annotation belongs
+     * @param int $pageid specifies the page within that pdf file
+     * @param string $type child class (highlight, strikeout, area, textbox, drawing, comment or point)
+     * @param int $itemid identifies the record in the respective child class table, e.g. highlights
      * @return int (or boolean false)
      */
     public static function create_annotation($documentid, $pageid, $type, $itemid) {
@@ -58,9 +60,9 @@ class pdfannotator_annotation {
      * Method updates data attribute (consisting of width, color and lines)
      * in mdl_pdfannotator_drawings after a drawing was shifted in position
      *
-     * @param type $annotationid
-     * @param type $newdata
-     * @return type int 1 for success
+     * @param int $annotationid The id of the annotation
+     * @param array $newdata The new data to be saved
+     * @return int 1 for success
      */
     public static function update($annotationid, $newdata) {
         global $DB, $USER;
@@ -92,11 +94,11 @@ class pdfannotator_annotation {
      * if the user is allowed to do so.
      * Teachers are allowed to delete any comment, students may only delete their own comments.
      *
-     * @param type $annotationId
-     * @param type $cmid
-     * @param type $deleteanyway Delete annotation in any case. F.e. if right to be forgotten was invoked or
+     * @param int $annotationid The id of the annotation
+     * @param int $cmid The id of the course module
+     * @param bool $deleteanyway Delete annotation in any case. F.e. if right to be forgotten was invoked or
      *  a user without the capability to delete the annotation deletes it implicitly by deleting the last comment of the annotation
-     * @return boolean
+     * @return bool
      */
     public static function delete($annotationid, $cmid = null, $deleteanyway = null) {
 
@@ -141,8 +143,10 @@ class pdfannotator_annotation {
 
     /**
      * Method checks whether the annotation as well as possible comments attached to it
-     * belong to the current user.     *
-     * @return
+     * belong to the current user.
+     *
+     * @param stdClass $annotation The id of the annotation
+     * @param int $cmid The id of the course module
      */
     public static function deletion_allowed($annotation, $cmid) {
 
@@ -178,7 +182,8 @@ class pdfannotator_annotation {
      * It returns true if the annotation was made by the user who is trying to shift it and no other person has answered
      * or if that user is an admin.
      *
-     * @param type $annotationId
+     * @param int $annotationid The id of the annotation
+     * @param context $context The context of the pdfannotator module
      * @return boolean
      */
     public static function shifting_allowed($annotationid, $context) {
@@ -201,7 +206,8 @@ class pdfannotator_annotation {
 
     /**
      * Return information for the dummy-comment of a textbox or drawing
-     * @param type $annotationid
+     *
+     * @param int $annotationid The id of the annotation
      */
     public static function get_information($annotationid) {
         global $DB;
@@ -227,6 +233,7 @@ class pdfannotator_annotation {
                 }
             }
             $comment->usevotes = 0;
+            // phpcs:disable moodle.Commenting.TodoComment
             $comment->uuid = -1; // TODO.
             $comment->annotation = $annotationid;
             $comment->isdeleted = 0;
@@ -242,8 +249,8 @@ class pdfannotator_annotation {
     /**
      * Method takes an annotation's id and returns the user id of its author
      *
-     * @param type $itemid
-     * @return type
+     * @param int $annotationid The id of the annotation
+     * @return int
      */
     public static function get_author($annotationid) {
 
@@ -254,8 +261,8 @@ class pdfannotator_annotation {
     /**
      * Method takes an annotation's id and returns the page it was made on
      *
-     * @param type $annotationId
-     * @return type
+     * @param int $annotationid The id of the annotation
+     * @return mixed
      */
     public static function get_pageid($annotationid) {
         global $DB;
@@ -265,8 +272,8 @@ class pdfannotator_annotation {
     /**
      * Method takes an annotation's id and returns the content of the underlying question comment
      *
-     * @param type $annotationId
-     * @return type
+     * @param int $annotationid The id of the annotation
+     * @return array
      */
     public static function get_question($annotationid) {
         global $DB;

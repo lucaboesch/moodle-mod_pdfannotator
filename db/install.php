@@ -16,17 +16,17 @@
 
 /**
  * File containing DB install instructions
+ *
  * @package   mod_pdfannotator
  * @copyright 2018 RWTH Aachen (see README.md)
  * @author    Anna Heynkes
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 /**
  * Function initialises the pdfannotator_annotationtypes table with its 6 standard records.
  *
  */
-defined('MOODLE_INTERNAL') || die();
-
 function xmldb_pdfannotator_install() {
 
     global $DB;

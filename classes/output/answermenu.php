@@ -26,11 +26,29 @@
 namespace mod_pdfannotator\output;
 use moodle_url;
 
+/**
+ * Class for rendering a dropdown menu in the answerstable on the overview tab.
+ */
 class answermenu implements \renderable, \templatable {
 
+    /**
+     * @var moodle_url
+     */
     private $url;
+
+    /**
+     * @var string
+     */
     private $iconclass;
+
+    /**
+     * @var \lang_string|string
+     */
     private $label;
+
+    /**
+     * @var string
+     */
     private $buttonclass;
 
     /**
@@ -79,8 +97,9 @@ class answermenu implements \renderable, \templatable {
     /**
      * This function is required by any renderer to retrieve the data structure
      * passed into the template.
+     *
      * @param \renderer_base $output
-     * @return type
+     * @return \stdClass
      */
     public function export_for_template(\renderer_base $output) {
         $data = [];

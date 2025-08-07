@@ -22,14 +22,19 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
-defined('MOODLE_INTERNAL') || die();
 
+
+/**
+ * Renderer class for the pdfannotator module.
+ */
 class mod_pdfannotator_renderer extends plugin_renderer_base {
 
     /**
+     * Renders the index page of the pdfannotator module.
      *
-     * @param type $index
-     * @return type
+     * @param stdClass $index
+     *
+     * @return string
      */
     public function render_index($index) {
         return $this->render_from_template('pdfannotator/index', $index->export_for_template($this));
@@ -37,7 +42,7 @@ class mod_pdfannotator_renderer extends plugin_renderer_base {
     /**
      *
      * @param \templatable $statistic
-     * @return type
+     * @return string
      */
     public function render_statistic(\templatable $statistic) {
         $data = $statistic->export_for_template($this);
@@ -47,7 +52,7 @@ class mod_pdfannotator_renderer extends plugin_renderer_base {
     /**
      * renders dropdown-actionmenu. Currently used on overview in the categories "answers" and "reports".
      * @param \templatable $dropdownmenu
-     * @return type
+     * @return string
      */
     public function render_dropdownmenu(\templatable $dropdownmenu) {
         $data = $dropdownmenu->export_for_template($this);
@@ -94,9 +99,9 @@ class mod_pdfannotator_renderer extends plugin_renderer_base {
      * Construct a tab header.
      *
      * @param moodle_url $baseurl
-     * @param string $what
+     * @param string $action
      * @param string $namekey
-     * @param string $subpage
+     * @param string $pdfannotatorname
      * @param string $nameargs
      * @return tabobject
      */
@@ -115,11 +120,11 @@ class mod_pdfannotator_renderer extends plugin_renderer_base {
      * Render the tab header hierarchy.
      *
      * @param moodle_url $baseurl
-     * @param type $pdfannotatorname
-     * @param type $context
-     * @param type $selected
-     * @param type $inactive
-     * @return type
+     * @param string $pdfannotatorname
+     * @param \core\context $context
+     * @param bool $selected
+     * @param string $inactive
+     * @return stdClass
      */
     public function pdfannotator_render_tabs(moodle_url $baseurl, $pdfannotatorname, $context, $selected = null, $inactive = null) {
 

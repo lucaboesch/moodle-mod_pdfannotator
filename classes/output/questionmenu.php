@@ -24,15 +24,29 @@
  */
 
 namespace mod_pdfannotator\output;
+
 use moodle_url;
 
-defined('MOODLE_INTERNAL') || die();
-
+/**
+ * Class for the question menu in the questionstable on overview tab.
+ */
 class questionmenu implements \renderable, \templatable {
 
+    /**
+     * @var moodle_url
+     */
     private $url;
+    /**
+     * @var string
+     */
     private $iconclass;
+    /**
+     * @var \lang_string|string
+     */
     private $label;
+    /**
+     * @var string
+     */
     private $buttonclass;
 
     /**
@@ -65,7 +79,7 @@ class questionmenu implements \renderable, \templatable {
      * This function is required by any renderer to retrieve the data structure
      * passed into the template.
      * @param \renderer_base $output
-     * @return type
+     * @return \stdClass
      */
     public function export_for_template(\renderer_base $output) {
         $data = [];

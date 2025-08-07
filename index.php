@@ -15,12 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Index script for the pdfannotator module.
+ *
  * @package   mod_pdfannotator
  * @copyright 2018 RWTH Aachen (see README.md)
  * @author    Ahmad Obeid
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-//require_once('../../config.php');
+
+defined('MOODLE_INTERNAL') || die();
+
 require_once('locallib.php');
 
 $id = required_param('id', PARAM_INT);           // Course ID.
@@ -29,7 +33,7 @@ $id = required_param('id', PARAM_INT);           // Course ID.
 if (!$course = $DB->get_record('course', ['id' => $id])) {
     throw new moodle_exception('Course ID is incorrect');
 }
-// $course = $DB->get_record('course', array('id'=>$id), '*', MUST_EXIST);
+
 require_course_login($course, true);
 $PAGE->set_pagelayout('incourse');
 
@@ -71,11 +75,11 @@ $table = new html_table();
 $table->attributes['class'] = 'generaltable mod_index';
 
 if ($usesections) {
-    $table->head  =  [$strsectionname, $strname, $strlastmodified, $strintro];
-    $table->align =  ['center', '', 'left', 'left'];
+    $table->head  = [$strsectionname, $strname, $strlastmodified, $strintro];
+    $table->align = ['center', '', 'left', 'left'];
 } else {
-    $table->head  =  [$strlastmodified, $strname, $strintro];
-    $table->align =  ['left', 'left', 'left'];
+    $table->head  = [$strlastmodified, $strname, $strintro];
+    $table->align = ['left', 'left', 'left'];
 }
 
 $modinfo = get_fast_modinfo($course);
@@ -138,7 +142,7 @@ foreach ($pdfannotators as $pdfannotator) {
     } else if ($lastmodified >= strtotime("-1 day")) {
             $newinfo = "<img src=\"pix/new.gif\"></img>";
     }
-    $table->data[] =  [
+    $table->data[] = [
         $printsection,
         "<div style=\"float:left\"><a $class $extra href=\"view.php?id=$cm->id\">".$icon.format_string($pdfannotator->name)
         .$newinfo."</a></div><div style=\"float:right\">".$setting."</div>" , userdate($lastmodified),
