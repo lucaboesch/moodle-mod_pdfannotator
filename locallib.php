@@ -2109,3 +2109,16 @@ function pdfannotator_count_answers($annotationid, $context) {
     }
     return $count;
 }
+
+/**
+ * Returns the subscription mode for a given pdfannotator
+ *
+ * @param $id The pdfannotator id
+ * @return false|int
+ * @throws dml_exception
+ */
+function pdfannotator_get_subscriptionmode($id) {
+    global $DB;
+    $subscriptionmode = $DB->get_field('pdfannotator', 'forcesubscribe', array('id' => $id), $strictness = MUST_EXIST);
+    return $subscriptionmode;
+}
