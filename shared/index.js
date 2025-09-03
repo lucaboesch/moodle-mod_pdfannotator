@@ -900,7 +900,7 @@ function startIndex(
 
                 // Initialise the print option for printing the document or its discussions.
                 (function () {
-                    if (_toolbarSettings.useprint || _capabilities.useprint) {
+                    if (_toolbarSettings.useprint === '1'|| _capabilities.useprint) {
                         $('#pdfannotator_print_button').click(function () {
                             openDocumentCallback();
                             setTimeout(function () {
@@ -915,7 +915,7 @@ function startIndex(
                         }
                     }
 
-                    if (_toolbarSettings.useprintcomments || _capabilities.useprintcomments) {
+                    if (_toolbarSettings.useprintcomments === '1'|| _capabilities.useprintcomments) {
                         const toggleDropdown = document.getElementById('printAnnotationsOptions');
                         const dropdown = document.getElementById('printAnnotationsOptionsContent');
 
