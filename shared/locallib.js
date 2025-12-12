@@ -156,11 +156,33 @@ function closeComment() {
     document.querySelector('.comment-list-container').innerHTML = '';
 }
 var oldHeight = -1;
+let drawerleft = false;
+let drawerright = false;
+
 function makeFullScreen() {
     document.querySelector('body').classList.toggle('fullscreenWrapper');
     // If it is now in fullscreen, the image should be the collapse fullscreen image.
     // Else it should be the fullscreen image.
+    const courseindexddrawer = document.querySelector('#theme_boost-drawers-courseindex');
+    const blocksdrawer = document.querySelector('#theme_boost-drawers-blocks');
+
     if (document.querySelector('body').classList.contains('fullscreenWrapper')) {
+        // Hide course index left sidebar
+        if (!courseindexddrawer) {
+            return;
+        } else {
+            drawerleft = courseindexddrawer.classList.contains('show');
+            courseindexddrawer.classList.remove('show');
+            courseindexddrawer.setAttribute('data-state', 'hide-drawer-left');
+        }
+        // Hide course blocks right sidebar
+        if (!blocksdrawer) {
+            return;
+        } else {
+            drawerright = blocksdrawer.classList.contains('show');
+            blocksdrawer.classList.remove('show');
+            blocksdrawer.setAttribute('data-state', 'hide-drawer-left');
+        }
         oldHeight = document.querySelector('#body-wrapper').style.height;
         let img = document.querySelector('img[title="' + M.util.get_string('fullscreen', 'pdfannotator') + '"]');
         img.title = M.util.get_string('fullscreenBack', 'pdfannotator');
@@ -170,6 +192,24 @@ function makeFullScreen() {
         var height = document.querySelector('html').getBoundingClientRect().height;
         document.querySelector('#body-wrapper').style.height = (height - 142) + 'px';
     } else {
+        if (!courseindexddrawer) {
+            return;
+        } else {
+            // Restore drawer when exiting fullscreen
+            if (drawerleft) {
+                courseindexddrawer.classList.add('show');
+                courseindexddrawer.setAttribute('data-state', 'show-drawer-left');
+            }
+        }
+        if (!blocksdrawer) {
+            return;
+        } else {
+            // Restore drawer when exiting fullscreen
+            if (drawerright) {
+                blocksdrawer.classList.add('show');
+                blocksdrawer.setAttribute('data-state', 'show-drawer-left');
+            }
+        }
         let img = document.querySelector('img[title="' + M.util.get_string('fullscreenBack', 'pdfannotator') + '"]');
         img.title = M.util.get_string('fullscreen', 'pdfannotator');
         img.alt = M.util.get_string('fullscreen', 'pdfannotator');
