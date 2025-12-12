@@ -8861,14 +8861,17 @@ function startIndex(
                                                 }),
                                                 null
                                             );
-                                            [textarea, data] = (0, _commentWrapper.openComment)(
-                                                e,
-                                                handleCancelTouch,
-                                                handleSubmitClick,
-                                                handleToolbarClick,
-                                                handleSubmitBlur,
-                                                _type
-                                            );
+                                            let fn = () => {
+                                                [textarea, data] = (0, _commentWrapper.openComment)(
+                                                    e,
+                                                    handleCancelClick,
+                                                    handleSubmitClick,
+                                                    handleToolbarClick,
+                                                    handleSubmitBlur,
+                                                    _type
+                                                );
+                                            };
+                                            _commentWrapper.loadEditor('add', 0, fn);
                                         } else {
                                             enableRect(_type);
                                             //Do nothing!
