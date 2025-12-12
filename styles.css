@@ -1,3 +1,7 @@
+.path-mod-pdfannotator ::selection {
+  background: var(--selection-color, rgba(0, 116, 255, 0.8));
+  color: inherit;
+}
 .path-mod-pdfannotator .pdf-annotator-hidden {
     display: none;
     visibility: hidden;
@@ -83,6 +87,7 @@
 }
 
 .path-mod-pdfannotator .text-color,
+.path-mod-pdfannotator .marker-color,
 .path-mod-pdfannotator .pen-color {
     z-index: 100;
     display: inline-block;
@@ -170,10 +175,6 @@
 
 .path-mod-pdfannotator .textLayer .highlight.selected {
     background-color: rgb(0, 100, 0);
-}
-
-.path-mod-pdfannotator .textLayer ::selection {
-    background: rgba(0, 0, 255, 1);
 }
 
 /* Avoids https://github.com/mozilla/pdf.js/issues/13840 in Chrome */

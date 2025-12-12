@@ -1697,6 +1697,55 @@ function startIndex(
                         initPen();
                     })(); // End initialize pen.
                 }
+                // Initialize marker.
+                (function () {
+                    let markerColor = void 0;
+
+                    function initMarker() {
+                        setMarker(
+                            localStorage.getItem(RENDER_OPTIONS.documentId + '/marker/color') || '#35A4DC' // 'Light Blue' color of the MARKERCOLORS array
+                        );
+
+                        (0, _initColorPicker2.default)(
+                            document.querySelector('.marker-color'),
+                            markerColor,
+                            function (value) {
+                                setMarker(value);
+                            },
+                            true
+                        );
+                    }
+
+                    function setMarker(color) {
+                        let modified = false;
+
+                        if (markerColor !== color) {
+                            modified = true;
+                            markerColor = color;
+                            localStorage.setItem(RENDER_OPTIONS.documentId + '/marker/color', markerColor);
+
+                            var selected = document.querySelector('.toolbar .marker-color.color-selected');
+
+                            if (selected) {
+                                selected.classList.remove('color-selected');
+                                selected.removeAttribute('aria-selected');
+                            }
+
+                            selected = document.querySelector('.toolbar .marker-color[data-color="' + color + '"]');
+                            if (selected) {
+                                selected.classList.add('color-selected');
+                                selected.setAttribute('aria-selected', true);
+                            }
+                        }
+
+                        if (modified) {
+                            UI.setMarker(markerColor);
+                        }
+                    }
+
+                    initMarker();
+                })(); // End initialize marker.
+
                 // Toolbar buttons (defined in index.mustache) are given event listeners:
                 (function () {
                     //Cursor should always be default selected
@@ -7087,6 +7136,7 @@ function startIndex(
                                     enablePoint: _point.enablePoint,
                                     disableRect: _rect.disableRect,
                                     enableRect: _rect.enableRect,
+                                    setMarker: _rect.setMarker,
                                     disableText: _text.disableText,
                                     enableText: _text.enableText,
                                     setText: _text.setText,
@@ -8427,6 +8477,7 @@ function startIndex(
                                 Object.defineProperty(exports, '__esModule', { value: true });
                                 exports.enableRect = enableRect;
                                 exports.disableRect = disableRect;
+                                exports.setMarker = setMarker;
                                 var _PDFJSAnnotate = __webpack_require__(1);
                                 var _PDFJSAnnotate2 = _interopRequireDefault(_PDFJSAnnotate);
                                 var _appendChild = __webpack_require__(11);
@@ -8458,6 +8509,7 @@ function startIndex(
                                 var documentId = -1;
                                 var pageNumber = 1;
 
+                                let _markerColor = void 0;
                                 var textarea = void 0;
                                 var submitbutton = void 0;
                                 var resetbutton = void 0;
@@ -8498,6 +8550,10 @@ function startIndex(
                                  * @param {Event} e The DOM event to handle
                                  */
                                 function handleDocumentMousedown(e) {
+                                    const container = document.querySelector('.path-mod-pdfannotator');
+                                    if (_type == 'highlight') {
+                                        container.style.setProperty('--selection-color', _markerColor);
+                                    }
                                     if (
                                         !(_svg = (0, _utils.findSVGAtPoint)(e.clientX, e.clientY)) ||
                                         _type !== 'area'
@@ -8627,7 +8683,6 @@ function startIndex(
                                                 ],
                                                 null
                                             );
-
                                             let fn = () => {
                                                 [textarea, data] = (0, _commentWrapper.openComment)(
                                                     e,
@@ -8639,6 +8694,87 @@ function startIndex(
                                                 );
                                             };
                                             _commentWrapper.loadEditor('add', 0, fn);
+                                        } else if ((rectsSelection = getSelectionRects()) && _type === 'highlight') {
+                                            const container = document.querySelector('.path-mod-pdfannotator');
+                                            container.style.setProperty('--selection-color', 'rgba(255, 255, 255, 0)');
+                                            renderRect(
+                                                _type,
+                                                [].concat(_toConsumableArray(rectsSelection)).map(function (r) {
+                                                    return {
+                                                        top: r.top,
+                                                        left: r.left,
+                                                        width: r.width,
+                                                        height: r.height,
+                                                    };
+                                                }),
+                                                _markerColor
+                                            );
+                                            let fn = () => {
+                                                [textarea, data] = (0, _commentWrapper.openComment)(
+                                                    e,
+                                                    handleCancelClick,
+                                                    handleSubmitClick,
+                                                    handleToolbarClick,
+                                                    handleSubmitBlur,
+                                                    _type
+                                                );
+                                            };
+                                            _commentWrapper.loadEditor('add', 0, fn);
+                                        } else if ((rectsSelection = getSelectionRects()) && _type === 'highlight') {
+                                            const container = document.querySelector('.path-mod-pdfannotator');
+                                            container.style.setProperty('--selection-color', 'rgba(255, 255, 255, 0)');
+                                            renderRect(
+                                                _type,
+                                                [].concat(_toConsumableArray(rectsSelection)).map(function (r) {
+                                                    return {
+                                                        top: r.top,
+                                                        left: r.left,
+                                                        width: r.width,
+                                                        height: r.height,
+                                                    };
+                                                }),
+                                                _markerColor
+                                            );
+                                            let fn = () => {
+                                                [textarea, data] = (0, _commentWrapper.openComment)(
+                                                    e,
+                                                    handleCancelClick,
+                                                    handleSubmitClick,
+                                                    handleToolbarClick,
+                                                    handleSubmitBlur,
+                                                    _type
+                                                );
+                                            };
+                                            _commentWrapper.loadEditor('add', 0, fn);
+                                            [textarea, data] = (0, _commentWrapper.openComment)(
+                                                e,
+                                                handleCancelTouch,
+                                                handleSubmitClick,
+                                                handleToolbarClick,
+                                                handleSubmitBlur,
+                                                _type
+                                            );
+                                        } else if ((rectsSelection = getSelectionRects()) && _type === 'highlight') {
+                                            renderRect(
+                                                _type,
+                                                [].concat(_toConsumableArray(rectsSelection)).map(function (r) {
+                                                    return {
+                                                        top: r.top,
+                                                        left: r.left,
+                                                        width: r.width,
+                                                        height: r.height,
+                                                    };
+                                                }),
+                                                _markerColor
+                                            );
+                                            [textarea, data] = (0, _commentWrapper.openComment)(
+                                                e,
+                                                handleCancelTouch,
+                                                handleSubmitClick,
+                                                handleToolbarClick,
+                                                handleSubmitBlur,
+                                                _type
+                                            );
                                         } else if ((rectsSelection = getSelectionRects()) && _type !== 'area') {
                                             renderRect(
                                                 _type,
@@ -8762,7 +8898,23 @@ function startIndex(
 
                                 function handleSubmitClick(e) {
                                     var rects = void 0;
-                                    if (_type !== 'area' && (rects = rectsSelection)) {
+                                    if (_type === 'highlight' && (rects = rectsSelection)) {
+                                        const container = document.querySelector('.path-mod-pdfannotator');
+                                        container.style.removeProperty('--selection-color');
+                                        saveRect(
+                                            _type,
+                                            [].concat(_toConsumableArray(rects)).map(function (r) {
+                                                return {
+                                                    top: r.top,
+                                                    left: r.left,
+                                                    width: r.width,
+                                                    height: r.height,
+                                                };
+                                            }),
+                                            _markerColor,
+                                            e
+                                        );
+                                    } else if (_type !== 'area' && (rects = rectsSelection)) {
                                         saveRect(
                                             _type,
                                             [].concat(_toConsumableArray(rects)).map(function (r) {
@@ -8886,7 +9038,7 @@ function startIndex(
                                     var _getMetadata = (0, _utils.getMetadata)(_svg);
                                     documentId = _getMetadata.documentId;
                                     pageNumber = _getMetadata.pageNumber;
-                                    var annotation = initializeAnnotation(type, rects, 'rgb(255,237,0)', _svg);
+                                    let annotation = initializeAnnotation(type, rects, color, _svg);
                                     rectObj = [_svg, annotation];
                                     (0, _appendChild2.default)(_svg, annotation);
                                 }
@@ -9048,6 +9200,16 @@ function startIndex(
                                         handleCancelClick(e);
                                         textarea.focus();
                                     }
+                                }
+                                /**
+                                 * Set the marker color
+                                 *
+                                 * @param {string} markerColor The color of the marker
+                                 */ 
+                                function setMarker() {
+                                    let markerColor =
+                                        arguments[0] === undefined ? '#000000' : arguments[0];
+                                    _markerColor = markerColor;
                                 }
                                 /**
                                  * Enable rect behavior
@@ -10722,7 +10884,26 @@ function startIndex(
                     { hex: '#F06291', name: 'Light Pink' },
                 ];
 
-                function initColorPicker(el, value, onChange) {
+                const MARKERCOLORS = [
+                    { hex: '#D2B48C', name: 'Beige' },
+                    { hex: '#EF4437', name: 'Red' },
+                    { hex: '#E71F63', name: 'Pink' },
+                    { hex: '#8F3E97', name: 'Purple' },
+                    { hex: '#808080', name: 'Gray' },
+                    { hex: '#4554A4', name: 'Indigo' },
+                    { hex: '#2083C5', name: 'Blue' },
+                    { hex: '#35A4DC', name: 'Light Blue' },
+                    { hex: '#A0522D', name: 'Browm' },
+                    { hex: '#009688', name: 'Teal' },
+                    { hex: '#43A047', name: 'Green' },
+                    { hex: '#8BC34A', name: 'Light Green' },
+                    { hex: '#FFFF00', name: 'Yellow' },
+                    { hex: '#F8971C', name: 'Orange' },
+                    { hex: '#F0592B', name: 'Deep Orange' },
+                    { hex: '#ADFF2F', name: 'GreenYellow' },
+                ];
+
+                function initColorPicker(el, value, onChange, marker=false) {
                     function setColor(value) {
                         var fireOnChange = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
@@ -10749,7 +10930,6 @@ function startIndex(
                             picker.parentNode.removeChild(picker);
                         }
                         isPickerOpen = false;
-                        a.focus();
                     }
 
                     function openPicker() {
@@ -10761,15 +10941,18 @@ function startIndex(
                             picker.style.position = 'absolute';
                             picker.style.width = '122px';
                             el.style.position = 'relative';
+                            let color = marker ? MARKERCOLORS : COLORS;
 
-                            COLORS.map(createColorOption).forEach(function (c) {
+                            color.map(createColorOption).forEach(function (c) {
                                 c.style.margin = '2px';
                                 c.onclick = function () {
-                                    // Select text/pen instead of cursor.
+                                    // Select text/pen/marker instead of cursor.
                                     if (c.parentNode.parentNode.className === 'text-color') {
                                         document.querySelector('#pdftoolbar button.text').click();
                                     } else if (c.parentNode.parentNode.className === 'pen-color') {
                                         document.querySelector('#pdftoolbar button.pen').click();
+                                    } else if (c.parentNode.parentNode.className === 'marker-color') {
+                                        document.querySelector('#pdftoolbar button.marker').click();
                                     }
                                     setColor(c.getAttribute('data-color'));
                                 };
