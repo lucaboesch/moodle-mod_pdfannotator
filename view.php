@@ -59,6 +59,10 @@ $pdfannotator->name = format_text($pdfannotator->name, FORMAT_MOODLE, ['para' =>
 pdfannotator_view($pdfannotator, $course, $cm, $context);
 
 $PAGE->set_url('/mod/pdfannotator/view.php', array('id' => $cm->id));
+$pageheading = $course->shortname . ' : ' . $pdfannotator->name;
+$PAGE->set_title($pageheading);
+$PAGE->set_heading($course->fullname); // Set course name for display.
+
 
 $fs = get_file_storage();
 $files = $fs->get_area_files($context->id, 'mod_pdfannotator', 'content', 0, 'sortorder DESC, id ASC', false);// TODO Not efficient!
