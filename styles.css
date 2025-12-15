@@ -1386,3 +1386,47 @@ header, section, footer, aside, nav, main, article, figure {
 .path-mod-pdfannotator .printAnnotationsOptionsContent.hidden {
     display: none;
 }
+table#mod-pdfannotator-questions {
+    table-layout: fixed;
+    width: 100%;
+}
+table#mod-pdfannotator-questions th.c0,
+table#mod-pdfannotator-questions td[id^="mod-pdfannotator-questions_r"][id$="_c0"] {
+    width: 45%;
+}
+
+table#mod-pdfannotator-questions th.c1,
+table#mod-pdfannotator-questions td[id^="mod-pdfannotator-questions_r"][id$="_c1"] {
+    width: 15%;
+}
+
+table#mod-pdfannotator-questions th.c2,
+table#mod-pdfannotator-questions td[id^="mod-pdfannotator-questions_r"][id$="_c2"] {
+    width: 7.5%;
+}
+
+table#mod-pdfannotator-questions th.c3,
+table#mod-pdfannotator-questions td[id^="mod-pdfannotator-questions_r"][id$="_c3"] {
+    width: 7.5%;
+}
+
+table#mod-pdfannotator-questions th.c4,
+table#mod-pdfannotator-questions td[id^="mod-pdfannotator-questions_r"][id$="_c4"] {
+    width: 10%;
+}
+
+table#mod-pdfannotator-questions th.c5,
+table#mod-pdfannotator-questions td[id^="mod-pdfannotator-questions_r"][id$="_c5"] {
+    width: 10%;
+}
+
+table#mod-pdfannotator-questions th.c6,
+table#mod-pdfannotator-questions td[id^="mod-pdfannotator-questions_r"][id$="_c6"] {
+    width: 5%;
+}
+table#mod-pdfannotator-questions td[id^="mod-pdfannotator-questions_r"][id$="_c0"] a.more {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    display: block;
+}

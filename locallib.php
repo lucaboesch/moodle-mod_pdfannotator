@@ -1856,7 +1856,30 @@ function pdfannotator_questionstable_add_row($thiscourse, $table, $question, $ur
     if (isset($question->displayhidden)) {
         $classname = 'dimmed_text';
     }
-    $content = "<a href=$question->link class='more'>$question->content</a>";
+    $link = new moodle_url($question->link);
+
+    // 1. Get plain text only
+    $fulltext = trim(strip_tags($question->content));
+
+    // 2. Collapse newlines and whitespace (CRITICAL for JS)
+    $fulltext = preg_replace('/\s+/', ' ', $fulltext);
+
+    // 3. Limit length to prevent JS infinite loops
+    $preview = mb_substr($fulltext, 0, 180);
+
+    if (mb_strlen($fulltext) > 180) {
+        $preview .= '…';
+    }
+
+    // 4. Escape for safe output
+    $preview = format_string($preview);
+
+    // 5. Build safe clickable link
+    $content = html_writer::link(
+        $link,
+        $preview,
+        ['class' => 'more']
+    );
     $pdfannotatorname = $question->pdfannotatorname;
 
     $data = array($content, $author . '<br>' . $time, $question->votes, $question->answercount, $lastanswered, $pdfannotatorname);
