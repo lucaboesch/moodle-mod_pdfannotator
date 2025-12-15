@@ -1,3 +1,12 @@
+## 2025121500 v1.5.9
+* version increment
+* fix items perpage dropdown + overview table styling
+* overview page crash fix + table styling
+* accessibility enhancement: tab title set to coursename and instance name
+* close sidebars in fullscreen mode
+* fix comment section in mobile view
+* colorpicker feature for highlighter implemented
+
 ## 2025070803 v1.5.9
 * fix images not being displayed in comments
 * remove explicit mathjax calls for rendering

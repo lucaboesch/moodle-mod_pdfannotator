@@ -66,8 +66,8 @@ function pdfannotator_display_embed($pdfannotator, $cm, $course, $file, $page = 
     // Load and execute the javascript files.
     $PAGE->requires->js(new moodle_url("/mod/pdfannotator/shared/pdf.js?ver=00002"));
     $PAGE->requires->js(new moodle_url("/mod/pdfannotator/shared/textclipper.js"));
-    $PAGE->requires->js(new moodle_url("/mod/pdfannotator/shared/index.js?ver=00043"));
-    $PAGE->requires->js(new moodle_url("/mod/pdfannotator/shared/locallib.js?ver=00008"));
+    $PAGE->requires->js(new moodle_url("/mod/pdfannotator/shared/index.js?ver=00044"));
+    $PAGE->requires->js(new moodle_url("/mod/pdfannotator/shared/locallib.js?ver=00009"));
 
     // Pass parameters from PHP to JavaScript.
 
@@ -984,7 +984,7 @@ function pdfannotator_prepare_overviewpage($cmid, $myrenderer, $taburl, $action,
     $strings = $stringman->load_component_strings('pdfannotator', 'en'); // Method gets the strings of the language files.
     $PAGE->requires->strings_for_js(array_keys($strings), 'pdfannotator'); // Method to use the language-strings in javascript.
     // 1.3 Add the javascript file that determines the dynamic behaviour of the page.
-    $PAGE->requires->js(new moodle_url("/mod/pdfannotator/shared/locallib.js?ver=00008"));
+    $PAGE->requires->js(new moodle_url("/mod/pdfannotator/shared/locallib.js?ver=00009"));
     $PAGE->requires->js(new moodle_url("/mod/pdfannotator/shared/overview.js?ver=00004"));
 
     // 1.4 Check user capabilities to view the different categories.
@@ -1666,6 +1666,35 @@ function pdfannotator_print_questions($questions, $thiscourse, $urlparams, $curr
 
     // Define flexible table.
     $table = new questionstable($url, $showdropdown);
+    $questioncount = count($questions);
+
+    $pages = $table->pdfannotator_build_pagesize_options($questioncount);
+
+    // Ensure current value is valid
+    if (!isset($pages[$itemsperpage])) {
+        $itemsperpage = 5;
+    }
+
+    // Render dropdown
+    echo html_writer::start_div('pdfannotator-pagesize-wrapper');
+
+    echo html_writer::tag('label',
+        get_string('itemsperpage', 'pdfannotator'),
+        ['for' => 'pdfannotator-pagesize']
+    );
+
+    echo html_writer::select(
+        $pages,                      // options
+        'perpage',                   // name
+        $itemsperpage,               // selected
+        false,                       // no empty option
+        [
+            'id' => 'pdfannotator-pagesize',
+            'onchange' => "location.href='{$url->out(false)}&itemsperpage=' + this.value"
+        ]
+    );
+
+    echo html_writer::end_div();
     $table->setup();
     // $table->pageable(false);
     // Sort the entries of the table according to time or number of votes.
@@ -1682,6 +1711,7 @@ function pdfannotator_print_questions($questions, $thiscourse, $urlparams, $curr
         }
     } else {
         $table->pagesize($itemsperpage, $questioncount);
+        $table->set_attribute('data-force-pagesize', 1);
         for ($i = $offset; $i < $questioncount; $i++) {
             $question = $questions[$i];
             if ($itemsperpage === 0) {
@@ -1856,7 +1886,30 @@ function pdfannotator_questionstable_add_row($thiscourse, $table, $question, $ur
     if (isset($question->displayhidden)) {
         $classname = 'dimmed_text';
     }
-    $content = "<a href=$question->link class='more'>$question->content</a>";
+    $link = new moodle_url($question->link);
+
+    // 1. Get plain text only
+    $fulltext = trim(strip_tags($question->content));
+
+    // 2. Collapse newlines and whitespace (CRITICAL for JS)
+    $fulltext = preg_replace('/\s+/', ' ', $fulltext);
+
+    // 3. Limit length to prevent JS infinite loops
+    $preview = mb_substr($fulltext, 0, 180);
+
+    if (mb_strlen($fulltext) > 180) {
+        $preview .= '…';
+    }
+
+    // 4. Escape for safe output
+    $preview = format_string($preview);
+
+    // 5. Build safe clickable link
+    $content = html_writer::link(
+        $link,
+        $preview,
+        ['class' => 'more']
+    );
     $pdfannotatorname = $question->pdfannotatorname;
 
     $data = array($content, $author . '<br>' . $time, $question->votes, $question->answercount, $lastanswered, $pdfannotatorname);

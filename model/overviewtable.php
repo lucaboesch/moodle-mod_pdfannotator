@@ -42,6 +42,13 @@ class overviewtable extends flexible_table {
             TABLE_VAR_PAGE    => 'page',  // This is used for pagination in the tables.
             TABLE_VAR_RESET   => 'treset'
             )));
+            //  ensure paging is enabled
+            $this->pageable(true);
+
+            //  ensure baseurl exists BEFORE parent::setup()
+            if (empty($this->baseurl)) {
+                $this->define_baseurl(new moodle_url('/'));
+            }
         parent::setup();
     }
     /**
@@ -53,6 +60,26 @@ class overviewtable extends flexible_table {
      */
     public static function wrap($string) {
         return "<span class='text'>$string</span>";
+    }
+    function pdfannotator_build_pagesize_options(int $questioncount) {
+        $pages = [5 => 5]; // always include 5
+
+        if ($questioncount > 10)  { $pages[10]  = 10;  }
+        if ($questioncount > 25)  { $pages[25]  = 25;  }
+        if ($questioncount > 50)  { $pages[50]  = 50;  }
+        if ($questioncount > 100) { $pages[100] = 100; }
+        if ($questioncount > 200) { $pages[200] = 200; }
+        if ($questioncount > 500) { $pages[500] = 500; }
+
+        $pages[-1] = get_string('all');
+
+        return $pages;
+    }
+
+    public function finish_html() {
+        error_log('overviewtable::finish_html called id=' . ($this->attributes['id'] ?? 'unknown') . ' pagesize=' . ($this->pagesize ?? 'n/a'));
+        // call parent
+        parent::finish_html();
     }
 
 }
