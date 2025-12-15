@@ -1666,6 +1666,35 @@ function pdfannotator_print_questions($questions, $thiscourse, $urlparams, $curr
 
     // Define flexible table.
     $table = new questionstable($url, $showdropdown);
+    $questioncount = count($questions);
+
+    $pages = $table->pdfannotator_build_pagesize_options($questioncount);
+
+    // Ensure current value is valid
+    if (!isset($pages[$itemsperpage])) {
+        $itemsperpage = 5;
+    }
+
+    // Render dropdown
+    echo html_writer::start_div('pdfannotator-pagesize-wrapper');
+
+    echo html_writer::tag('label',
+        get_string('itemsperpage', 'pdfannotator'),
+        ['for' => 'pdfannotator-pagesize']
+    );
+
+    echo html_writer::select(
+        $pages,                      // options
+        'perpage',                   // name
+        $itemsperpage,               // selected
+        false,                       // no empty option
+        [
+            'id' => 'pdfannotator-pagesize',
+            'onchange' => "location.href='{$url->out(false)}&itemsperpage=' + this.value"
+        ]
+    );
+
+    echo html_writer::end_div();
     $table->setup();
     // $table->pageable(false);
     // Sort the entries of the table according to time or number of votes.
@@ -1682,6 +1711,7 @@ function pdfannotator_print_questions($questions, $thiscourse, $urlparams, $curr
         }
     } else {
         $table->pagesize($itemsperpage, $questioncount);
+        $table->set_attribute('data-force-pagesize', 1);
         for ($i = $offset; $i < $questioncount; $i++) {
             $question = $questions[$i];
             if ($itemsperpage === 0) {

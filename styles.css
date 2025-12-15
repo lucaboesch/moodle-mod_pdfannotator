@@ -1382,6 +1382,13 @@ header, section, footer, aside, nav, main, article, figure {
     width: 20px;
     height: auto;
 }
+.pdfannotator-pagesize-wrapper {
+    padding-bottom: 1%;
+    padding-top:0.5%;
+}
+label[for="pdfannotator-pagesize"] {
+    padding-right: 0.5%;
+}
 
 .path-mod-pdfannotator .printAnnotationsOptionsContent.hidden {
     display: none;
@@ -1390,9 +1397,13 @@ table#mod-pdfannotator-questions {
     table-layout: fixed;
     width: 100%;
 }
+#mod-pdfannotator-questions th, #mod-pdfannotator-questions td {
+    padding: 0.5%;
+}
+
 table#mod-pdfannotator-questions th.c0,
 table#mod-pdfannotator-questions td[id^="mod-pdfannotator-questions_r"][id$="_c0"] {
-    width: 45%;
+    width: 40%;
 }
 
 table#mod-pdfannotator-questions th.c1,
@@ -1422,7 +1433,7 @@ table#mod-pdfannotator-questions td[id^="mod-pdfannotator-questions_r"][id$="_c5
 
 table#mod-pdfannotator-questions th.c6,
 table#mod-pdfannotator-questions td[id^="mod-pdfannotator-questions_r"][id$="_c6"] {
-    width: 5%;
+    width: 8%;
 }
 table#mod-pdfannotator-questions td[id^="mod-pdfannotator-questions_r"][id$="_c0"] a.more {
     white-space: normal;
